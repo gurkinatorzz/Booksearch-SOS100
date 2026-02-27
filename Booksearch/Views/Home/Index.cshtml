@@ -1,9 +1,26 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Hem";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>test123</p>
-    </div>
+@* kod för att hämta in css filen *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/homepage.css"/>
+}
+    
+@* unikt innehåll per sida!*@
+<div class="previewBox">
+    <section class="previewBoxLeft">
+        <img class="previewBoxImg" src="~/images/librarypicture.png" alt="bibliotek"/>
+    </section>
+    <section class="previewBoxRight">
+        <h1>Upptäck ditt nästa äventyr</h1>
+        <p class="previewBoxRightP">
+            Välkommen till en plats där berättelser väntar på att bli upptäckta. I vårt bibliotek kan du utforska allt från spännande romaner och klassiska mästerverk till faktaböcker, biografier och inspirerande litteratur inom alla tänkbara ämnen. Oavsett om du söker kunskap, underhållning eller en stunds avkoppling finns det alltid något nytt att hitta bland våra hyllor. Bläddra bland titlar, hitta dina favoriter och hyr böcker enkelt och smidigt – allt för att göra din läsupplevelse så tillgänglig och inspirerande som möjligt.
+        </p>
+        <a class="previewBtn" id="previewBtn" asp-controller="Home" asp-action="Privacy">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6q47 0 91.5 10.5T440-278Zm40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q74 0 126 17t112 52q11 6 16.5 14t5.5 21v418q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-481q15 5 29.5 11t28.5 14q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm140-240v-440l120-40v440l-120 40Zm-340-99Z"/></svg>
+            <p>UTFORSKA BIBLIOTEK</p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
+            </a>
+    </section>
+</div>

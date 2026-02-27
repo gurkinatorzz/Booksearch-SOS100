@@ -1,0 +1,129 @@
+body {
+    /*background-color: pink;*/
+    
+}
+
+.previewBox {
+    width: 100%;
+    height: 50vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 100px;
+}
+
+.previewBoxLeft {
+    border-radius: 30px 0 0 30px;
+    grid-column: 1;
+    height: 100%;
+    width: auto;
+    overflow: hidden;
+}
+.previewBoxImg {
+    /* ska vara en bild här senare, så denna är lite förberedd! */
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.previewBoxRight {
+/*    border: 1px solid var(--color-theme2);
+    border-left: none;*/
+    border-top: 1px solid grey;
+    grid-column: 2;
+    height: 100%;
+    width: auto;
+/*    background-color: var(--color-theme2);*/
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 20px;
+    
+}
+.previewBoxRight h1 {
+    text-align: left;
+    font-weight: bold;
+    font-size: 4em;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 10px;
+    text-decoration-color: var(--color-theme2);
+    justify-self: start;
+    margin-top: 0;
+    
+    text-transform: uppercase; /* ändrar till CAPS-LOCK*/
+    letter-spacing: 0.1px;
+    word-spacing: 0.1px;
+    text-shadow: 2px 2px 15px rgba(96, 91, 91, 0.3);
+}
+.previewBoxRightP {
+    border-bottom: 2px solid var(--color-theme2);
+    font-size: 1.5em;
+    /*color: #222020;*/
+    color: black;
+    opacity: 0.8;
+    font-weight: 400;
+    height: auto;
+    text-align: justify; /* spacear ut allt, kan välja start/end för höger och vänster*/
+}
+
+/* button inställningar */
+.previewBtn {
+    all: unset;
+    grid-column: 1 / -1;
+    position: relative;
+    
+    border: 1px solid lightgrey;
+    border-radius: 15px 2px 30px 15px; /* special form med radier */
+    background: transparent;
+    isolation: isolate;
+    
+    min-width: 400px;
+    width: auto;
+    height: 50px;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: space-around;
+    padding-right: 5px;
+    padding-left: 10px;
+    
+    justify-self: end;
+    cursor: pointer;
+    transition: transform 0.5s ease-in-out;
+
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.previewBtn svg {
+    height: 25px;
+    width: 25px;
+}
+.previewBtn svg:nth-of-type(1) {
+    fill: black;
+    height: 60px;
+    width: 60px;
+}
+.previewBtn svg:nth-of-type(2) {
+    fill: var(--color-theme2);
+
+    /*     border-bottom: 2px solid black; */
+}
+
+.previewBtn p {
+    font-style: oblique;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-theme2);
+    text-decoration-thickness: 5px;
+}
+.previewBtn:hover {
+    border-color: var(--color-theme2);
+    box-shadow: 2px 2px 5px var(--color-theme2);
+}
+.previewBtn:active {
+    background-color: var(--color-theme2);
+}
