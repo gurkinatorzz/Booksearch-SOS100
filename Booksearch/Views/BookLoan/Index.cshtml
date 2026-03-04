@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Utlåning";
+}
+
+<section class="pageHeader">
+    <h1>Utlåning</h1>
+    <p>Här hanterar du boklån: skapa lån, se aktiva lån och markera återlämning.</p>
+
+    <div class="pageActions">
+        <a class="btn" asp-controller="BookLoan" asp-action="Create">Låna en bok</a>
+    </div>
+</section>
+
+<section class="contentSection">
+    <h2>Aktiva lån</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Bok</th>
+            <th>Låntagare</th>
+            <th>Lånedatum</th>
+            <th>Återlämnas</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="5">Inga aktiva lån ännu.</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
