@@ -20,7 +20,7 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
     
 });
 /*--------------------------------------------------------------------------------*/
-
+builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,3 +45,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+

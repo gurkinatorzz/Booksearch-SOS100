@@ -40,6 +40,11 @@
                     <li>
                         <a asp-area="" asp-controller="BookLoan" asp-action="Index">Låna Bok</a> @*lägg in korrekt länk*@
                     </li>
+                    <li>
+                        <a asp-controller="Reservation" asp-action="Queue" asp-route-bookId="1">
+                            Reservationer
+                        </a>
+                    </li>
                 </ul>
                 <button class="hamburgerButton">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">

@@ -1,0 +1,52 @@
+﻿@model Booksearch.ViewModels.ReservationQueueVm
+
+@{
+    ViewData["Title"] = "Kö";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Reservation.css"/>
+}
+
+<h1 class="bookRentalContainerTitle">Kö för: @Model.BookTitle</h1>
+
+<div class="bookRentalContainer">
+    @if (Model.Reservations != null && Model.Reservations.Any())
+    {
+        var place = 1;
+
+        foreach (var r in Model.Reservations)
+        {
+            <div class="reservationCard">
+                <h2 class="reservationPlace">#@place</h2>
+                <p><strong>@r.UserName</strong></p>
+                <p class="reservationMeta">Skapad: @r.CreatedAtUtc.ToLocalTime()</p>
+
+                <form asp-action="Cancel" method="post" class="reservationInlineForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="reservationId" value="@r.Id" />
+                    <input type="hidden" name="bookId" value="@Model.BookId" />
+                    <button type="submit" class="reservationBtn reservationBtnDanger">Avboka</button>
+                </form>
+            </div>
+
+            place++;
+        }
+    }
+    else
+    {
+        <div class="reservationCard">
+            <p>Ingen står i kö just nu.</p>
+        </div>
+    }
+
+    <div class="reservationCard reservationCardAction">
+        <a class="reservationBtnLink"
+           asp-controller="Reservation"
+           asp-action="Create"
+           asp-route-bookId="@Model.BookId">
+            Reservera boken
+        </a>
+    </div>
+</div>

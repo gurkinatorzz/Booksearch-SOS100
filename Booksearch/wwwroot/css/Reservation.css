@@ -1,0 +1,74 @@
+﻿.reservationCard {
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    background: white;
+}
+
+.reservationInfo {
+    margin-top: 0;
+    opacity: 0.85;
+}
+
+.reservationField {
+    margin: 15px 0;
+}
+
+.reservationInput {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid lightgrey;
+    padding: 0 10px;
+    margin-top: 8px;
+}
+
+.reservationError {
+    color: firebrick;
+}
+
+.reservationLinks {
+    margin-top: 12px;
+}
+
+.reservationMeta {
+    color: grey;
+}
+
+.reservationPlace {
+    margin-top: 0;
+}
+
+.reservationInlineForm {
+    margin-top: 10px;
+}
+
+.reservationBtn {
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.reservationBtn:hover {
+    border-color: var(--color-theme2);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.reservationBtnDanger:hover {
+    border-color: firebrick;
+}
+
+.reservationBtnLink {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    padding: 10px 14px;
+}
+
+.reservationBtnLink:hover {
+    border-color: var(--color-theme2);
+}
