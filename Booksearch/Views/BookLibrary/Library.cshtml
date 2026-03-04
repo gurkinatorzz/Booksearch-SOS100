@@ -1,0 +1,41 @@
+@model List<Booksearch.Models.BookLibraryDtos.BookListDto>
+
+@{
+    ViewData["Title"] = "Bibliotek";
+}
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/Library.css"/>
+}
+
+<h1 class="bookRentalContainerTitle">Utforska böcker</h1>
+<div class="bookRentalContainer">
+    
+    @* Mata in från API *@
+    @if (Model != null && Model.Any())
+    {
+        foreach (var Book in Model)
+        {
+            <div>
+                <img class="bookCover" src="" alt="Book image"/>
+                <h2>@Book.Title</h2>
+                <p>@Book.Author</p>
+                <p>@Book.Category</p>
+                <p>@Book.Year</p>
+            </div>
+        }
+    }
+    else
+    {   
+        <div><p>Inga böcker kunde laddas</p></div>
+    }
+    <button>Visa alla böcker</button>
+</div>
+<div>
+    <a asp-action="LibraryAdmin" asp-controller="BookLibrary">TILL ADMIN SIDAN:</a>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/library.js"></script>
+}

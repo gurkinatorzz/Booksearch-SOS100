@@ -29,8 +29,11 @@
                         <a asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="Home" asp-action="Privacy">Bibliotek</a> @*lägg in korrekt länk*@
+                        <a  asp-area="" asp-controller="BookLibrary" asp-action="Index">Bibliotek</a>
                     </li>
+                    @*<li>
+                        <a asp-area="" asp-controller="BookLibrary" asp-action="LibraryAdmin">ADMIN BIBLIOTEK</a>
+                    </li>*@
                     <li>
                         <a asp-area="" asp-controller="Home" asp-action="321">Bokning</a> @*lägg in korrekt länk*@
                     </li>
@@ -62,7 +65,8 @@
     </div>
     <div>
         <h2>Snabblänkar</h2>
-        <a asp-action="Index" asp-controller="Home"><p>Bibliotek</p></a>
+        <a asp-action="Index" asp-controller="BookLibrary"><p>Bibliotek</p></a>
+        <a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p>Administrera bibliotek</p></a>
         <a asp-action="Index" asp-controller="Home"><p>Boka grupprum</p></a>
         <a asp-action="Index" asp-controller="Home"><p id="loggaInP">Logga in</p></a>
     </div>

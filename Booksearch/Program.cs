@@ -1,7 +1,25 @@
+using Booksearch.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+/*------------------GUSTAVS RÖR EJ!!!---------------------------------------------*/
+//Lägg till HttpClient till BookLibrary API (Gustavs):
+builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient) =>
+{
+    // Hämta config
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    
+    // Hämta adress till BookLibrary ifrån config
+    string adress = config.GetValue<string>("BookLibraryAdress") ?? "";
+    
+    httpClient.BaseAddress = new Uri(adress);
+    httpClient.DefaultRequestHeaders.Add("X-LIBRARY-API-KEY", config["LibraryApiKey"]);
+    
+});
+/*--------------------------------------------------------------------------------*/
 
 var app = builder.Build();
 
