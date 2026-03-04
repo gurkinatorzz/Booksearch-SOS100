@@ -1,0 +1,22 @@
+﻿<link rel="stylesheet" href="~/css/rooms.css" />
+@{
+    ViewData["Title"] = "Boka Grupprum";
+}
+
+<h2>Boka Grupprum</h2>
+
+<form class="booking-form">
+    <label>Rum:</label>
+    <input type="text" name="RoomName" required />
+
+    <label>Bokad av:</label>
+    <input type="text" name="BookedBy" required />
+
+    <label>Starttid:</label>
+    <input type="datetime-local" name="StartTime" required />
+
+    <label>Sluttid:</label>
+    <input type="datetime-local" name="EndTime" required />
+
+    <button type="submit">Spara bokning</button>
+</form>
