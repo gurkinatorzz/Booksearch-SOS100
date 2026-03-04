@@ -9,19 +9,20 @@
 }
 
 <h1 class="bookRentalContainerTitle">Utforska böcker</h1>
-<div class="bookRentalContainer">
+<div class="bookRentalContainer" id="bookContainer">
     
     @* Mata in från API *@
     @if (Model != null && Model.Any())
     {
-        foreach (var Book in Model)
+        foreach (var Book in Model.OrderBy(b => b.Title))
         {
-            <div>
+            <div class="book">
                 <img class="bookCover" src="" alt="Book image"/>
                 <h2>@Book.Title</h2>
                 <p>@Book.Author</p>
                 <p>@Book.Category</p>
                 <p>@Book.Year</p>
+                <button>HYR</button>
             </div>
         }
     }
@@ -29,11 +30,11 @@
     {   
         <div><p>Inga böcker kunde laddas</p></div>
     }
-    <button>Visa alla böcker</button>
 </div>
-<div>
-    <a asp-action="LibraryAdmin" asp-controller="BookLibrary">TILL ADMIN SIDAN:</a>
+<div class="showAllBooks">
+    <button id="showAllBtn">Visa alla</button>
 </div>
+
 
 @section Scripts
 {
