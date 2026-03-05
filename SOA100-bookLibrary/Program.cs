@@ -11,6 +11,17 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+//Skapa en cors-policy och tillåt react-app på annan domän
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactAppPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();        
+    });
+
+});
 
 /* --------------------------------------------------------------------------------------- */
 //konfigurera DbContext för SQLite
@@ -55,5 +66,7 @@ app.UseAuthorization();
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.MapControllers();
+
+app.UseCors("ReactAppPolicy");
 
 app.Run();
