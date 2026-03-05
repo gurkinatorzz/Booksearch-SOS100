@@ -198,4 +198,28 @@ public class BookLibraryController : Controller
         }    
         
     }
+    
+    //skicka bok information från MVC till hyr API:
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Rent(int bookId)
+    {
+        try
+        {
+            using var http = new HttpClient();
+
+            var res = await http.PostAsJsonAsync(
+                "https://webhook.site/66f599b5-1850-47ee-988e-1f49684c713f", //Byt senare till williams API!
+                new { bookId = bookId }
+            );
+
+            TempData["Msg"] = res.IsSuccessStatusCode ? "Boken hyrdes!" : "Kunde inte hyra boken.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (Exception ex)
+        {
+            TempData["Msg"] = "Fel: " + ex.Message;
+            return RedirectToAction(nameof(Index));
+        }
+    }
 }
