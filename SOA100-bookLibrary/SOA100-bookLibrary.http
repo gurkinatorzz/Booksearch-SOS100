@@ -1,0 +1,6 @@
+@SOA100_bookLibrary_HostAddress = http://localhost:5253
+
+GET {{SOA100_bookLibrary_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

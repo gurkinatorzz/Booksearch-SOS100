@@ -41,3 +41,17 @@ showAllBtn.addEventListener("click", () => {
     
     expanded = !expanded;
 });
+
+//test för GET metod av uthyrning av böcker genom att trycka på hyr knappen:
+/*
+document.addEventListener("click", async (e) => {
+    if (!e.target.classList.contains("rentBtn")) return;
+
+    const bookId = Number(e.target.dataset.bookId);
+
+    await fetch("https://webhook.site/66f599b5-1850-47ee-988e-1f49684c713f", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookId })
+    });
+});*/
