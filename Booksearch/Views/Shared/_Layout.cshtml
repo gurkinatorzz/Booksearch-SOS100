@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="~/Booksearch.styles.css" asp-append-version="true"/>
     @RenderSection("Styles", required: false)
 </head>
-<body>
+ <body class="@ViewData["BodyClass"]">
 <header>
 
     <nav class="navbar">
@@ -34,8 +34,8 @@
                     @*<li>
                         <a asp-area="" asp-controller="BookLibrary" asp-action="LibraryAdmin">ADMIN BIBLIOTEK</a>
                     </li>*@
-                    <li>
-                        <a asp-area="" asp-controller="Home" asp-action="321">Bokning</a> @*lägg in korrekt länk*@
+                    <li id="navBooking">
+                        <a asp-area="" asp-controller="Home" asp-action="321">Bokning</a>
                     </li>
                     <li>
                         <a asp-area="" asp-controller="BookLoan" asp-action="Index">Låna Bok</a> @*lägg in korrekt länk*@
@@ -68,14 +68,16 @@
         <p>Axel Magnusson - Axma0007@student.hv.se</p>
         <p>Gustav Johansson - Gujo0020@student.hv.se</p>
         <p>Rayan Hadrous - Rayan@student.hv.se</p>
-        <p>Ruqia Ali Roselle - Ruqia@student.hv.se</p>
+        <p>Roselle Ali - Roselle.ali@student.hv.se</p>
         <p>William Berge - Wibe0005@student.hv.se</p>
     </div>
     <div>
         <h2>Snabblänkar</h2>
         <a asp-action="Index" asp-controller="BookLibrary"><p>Bibliotek</p></a>
         <a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p>Administrera bibliotek</p></a>
-        <a asp-action="Index" asp-controller="Home"><p>Boka grupprum</p></a>
+        <a id="footerBooking" asp-action="Index" asp-controller="Home">
+            <p>Boka grupprum</p>
+        </a>
         <a asp-action="Index" asp-controller="Home"><p id="loggaInP">Logga in</p></a>
     </div>
 </footer>

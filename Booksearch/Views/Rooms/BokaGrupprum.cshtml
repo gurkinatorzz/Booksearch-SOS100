@@ -1,22 +1,74 @@
-﻿<link rel="stylesheet" href="~/css/rooms.css" />
-@{
-    ViewData["Title"] = "Boka Grupprum";
+﻿@{
+    ViewData["Title"] = "Boka grupprum";
+    ViewData["BodyClass"] = "rooms-page";
+} 
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/rooms.css" />
 }
 
-<h2>Boka Grupprum</h2>
+<div class="bookingSection">
 
-<form class="booking-form">
-    <label>Rum:</label>
-    <input type="text" name="RoomName" required />
+    <div class="bookingImageLeft">
+        <img src="/images/studyroom.jpg" alt="Study room">
+    </div>
 
-    <label>Bokad av:</label>
-    <input type="text" name="BookedBy" required />
+    <div class="bookingFormBox">
 
-    <label>Starttid:</label>
-    <input type="datetime-local" name="StartTime" required />
+        <h1>Boka ett grupprum</h1>
 
-    <label>Sluttid:</label>
-    <input type="datetime-local" name="EndTime" required />
+        <!-- STEG 1: välj datum och tid -->
+        <div class="roomSearch">
 
-    <button type="submit">Spara bokning</button>
-</form>
+            <div class="formGroup">
+                <label>Datum</label>
+                <input type="date" name="Date">
+            </div>
+
+            <div class="formGroup">
+                <label>Starttid</label>
+                <input type="time" name="StartTime">
+            </div>
+
+            <div class="formGroup">
+                <label>Sluttid</label>
+                <input type="time" name="EndTime">
+            </div>
+
+            <button class="roomSubmit">
+                Visa tillgängliga rum
+            </button>
+
+        </div>
+
+        <!-- STEG 2: visa rum -->
+        <div class="availableRooms">
+
+            <h2>Tillgängliga rum</h2>
+
+            <div class="roomCard">
+                <p><strong>Rum London</strong> – 4 personer</p>
+                <span class="available">Ledigt</span>
+                <button>Boka</button>
+            </div>
+
+            <div class="roomCard">
+                <p><strong>Rum Rom</strong> – 6 personer</p>
+                <span class="unavailable">Upptaget</span>
+            </div>
+
+            <div class="roomCard">
+                <p><strong>Rum Paris</strong> – 8 personer</p>
+                <span class="available">Ledigt</span>
+                <button>Boka</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bookingImageRight">
+        <img src="/images/library.jpg" alt="Library">
+    </div>
+
+</div>
