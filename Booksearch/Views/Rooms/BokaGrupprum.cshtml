@@ -1,12 +1,13 @@
-﻿@{
+﻿@model Booksearch.ViewModels.RoomBookingVM
+
+@{
     ViewData["Title"] = "Boka grupprum";
     ViewData["BodyClass"] = "rooms-page";
-} 
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/rooms.css" />
 }
-
 <div class="bookingSection">
 
     <div class="bookingImageLeft">
@@ -18,8 +19,8 @@
         <h1>Boka ett grupprum</h1>
 
         <!-- STEG 1: välj datum och tid -->
-        <div class="roomSearch">
-
+        <form method="post" class="roomSearch">
+        
             <div class="formGroup">
                 <label>Datum</label>
                 <input type="date" name="Date">
@@ -39,7 +40,7 @@
                 Visa tillgängliga rum
             </button>
 
-        </div>
+        </form>
 
         <!-- STEG 2: visa rum -->
         <div class="availableRooms">
