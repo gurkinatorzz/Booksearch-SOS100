@@ -32,4 +32,20 @@ public class RoomsController : ControllerBase
 
         return CreatedAtAction(nameof(GetRooms), new { id = room.Id }, room);
     }
+
+    // NY METOD ↓
+    [HttpGet("available")]
+    public async Task<ActionResult<IEnumerable<Room>>> GetAvailableRooms(DateTime startTime, DateTime endTime)
+    {
+        var bookedRoomIds = await _context.RoomBookings
+            .Where(b => b.StartTime < endTime && b.EndTime > startTime)
+            .Select(b => b.RoomId)
+            .ToListAsync();
+
+        var availableRooms = await _context.Rooms
+            .Where(r => !bookedRoomIds.Contains(r.Id))
+            .ToListAsync();
+
+        return availableRooms;
+    }
 }
