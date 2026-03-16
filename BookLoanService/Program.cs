@@ -1,4 +1,6 @@
+using BookLoanService.Data;
 using BookLoanService.Services;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+//Konfiguera DbContext för sqlite
+builder.Services.AddDbContext<BookLoanServiceDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 //lägg till http till till service
 builder.Services.AddHttpClient<LoanService>((serviceProvider, httpClient) =>
