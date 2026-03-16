@@ -35,9 +35,7 @@
                         <a asp-area="" asp-controller="BookLibrary" asp-action="LibraryAdmin">ADMIN BIBLIOTEK</a>
                     </li>*@
                     <li id="navBooking">
-                        
-                        <a asp-controller="Rooms" asp-action="BokaGrupprum">Bokning</a>
-                        
+                        <a asp-area="" asp-controller="Rooms" asp-action="BokaGrupprum">Bokning</a>
                     </li>
                     <li>
                         <a asp-area="" asp-controller="BookLoan" asp-action="Index">Låna Bok</a> @*lägg in korrekt länk*@
@@ -77,11 +75,9 @@
         <h2>Snabblänkar</h2>
         <a asp-action="Index" asp-controller="BookLibrary"><p>Bibliotek</p></a>
         <a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p>Administrera bibliotek</p></a>
-        
-        <a id="footerBooking" asp-action="BokaGrupprum" asp-controller="Rooms">
+        <a id="footerBooking" asp-action="Index" asp-controller="Home">
             <p>Boka grupprum</p>
         </a>
-        
         <a asp-action="Index" asp-controller="Home"><p id="loggaInP">Logga in</p></a>
     </div>
 </footer>
