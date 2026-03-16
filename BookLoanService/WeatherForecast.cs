@@ -1,4 +1,4 @@
-namespace RoomService;
+namespace BookLoanService;
 
 public class WeatherForecast
 {

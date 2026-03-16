@@ -1,6 +1,48 @@
 @RoomService_HostAddress = http://localhost:5091
 
-GET {{RoomService_HostAddress}}/weatherforecast/
+###
+GET {{RoomService_HostAddress}}/api/rooms
 Accept: application/json
 
 ###
+POST {{RoomService_HostAddress}}/api/rooms
+Content-Type: application/json
+
+{
+  "name": "London",
+  "capacity": 4
+}
+
+###
+POST {{RoomService_HostAddress}}/api/roombookings
+Content-Type: application/json
+
+{
+  "roomId": 1,
+  "bookedBy": "TestUser1",
+  "startTime": "2026-03-15T10:00:00",
+  "endTime": "2026-03-15T12:00:00"
+}
+
+###
+GET {{RoomService_HostAddress}}/api/roombookings
+Accept: application/json
+
+###
+DELETE {{RoomService_HostAddress}}/api/roombookings/1
+
+###
+PUT {{RoomService_HostAddress}}/api/roombookings/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "roomId": 1,
+  "bookedBy": "TestUser2",
+  "startTime": "2026-03-15T13:00:00",
+  "endTime": "2026-03-15T15:00:00"
+}
+
+###
+GET {{RoomService_HostAddress}}/api/rooms/available?startTime=2026-03-15T09:00:00&endTime=2026-03-15T11:00:00
+Accept: application/json

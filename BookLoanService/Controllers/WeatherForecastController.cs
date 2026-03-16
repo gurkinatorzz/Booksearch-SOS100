@@ -1,6 +1,7 @@
+using BookLoanService.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoomService.Controllers;
+namespace BookLoanService.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -22,4 +23,11 @@ public class WeatherForecastController : ControllerBase
             })
             .ToArray();
     }
+    private LoanService _service;
+
+    public WeatherForecastController(LoanService loanservice)
+    {
+        _service = loanservice;  
+    }
+    
 }

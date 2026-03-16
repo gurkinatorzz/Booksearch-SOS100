@@ -1,74 +1,182 @@
-﻿@{
+﻿@model Booksearch.ViewModels.RoomBookingVM
+@using System.Security.Claims
+@{
     ViewData["Title"] = "Boka grupprum";
     ViewData["BodyClass"] = "rooms-page";
-} 
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/rooms.css" />
 }
 
 <div class="bookingSection">
+  <div class="bookingFormBox">
 
-    <div class="bookingImageLeft">
-        <img src="/images/studyroom.jpg" alt="Study room">
+    <h1>Boka grupprum</h1>
+    <p class="pageSubText">Följ stegen nedan för att slutföra din bokning</p>
+
+    <!-- Steg-indikator -->
+    <div class="stepsRow">
+      <div class="stepItem">
+        <div class="stepDot active" id="n1">1</div>
+        <span class="stepLabel active" id="l1">Datum</span>
+        <div class="stepLine"></div>
+      </div>
+      <div class="stepItem">
+        <div class="stepDot" id="n2">2</div>
+        <span class="stepLabel" id="l2">Rum &amp; tid</span>
+        <div class="stepLine"></div>
+      </div>
+      <div class="stepItem">
+        <div class="stepDot" id="n3">3</div>
+        <span class="stepLabel" id="l3">Bekräfta</span>
+      </div>
     </div>
 
-    <div class="bookingFormBox">
+    <form asp-action="BokaGrupprum" method="post" id="bookingForm">      @Html.AntiForgeryToken()
+      <input type="hidden" asp-for="RoomId"   id="hiddenRoomId" />
+      <input type="hidden" asp-for="TimeSlot" id="hiddenTimeSlot" />
+      <input type="hidden" asp-for="BookedBy" value="@User.Identity!.Name" />
 
-        <h1>Boka ett grupprum</h1>
+      <!-- STEG 1: Datum -->
+      <div id="step1">
+        <p class="secLabel">Välj datum</p>
+        <input type="date" class="dateInput" asp-for="BookingDate"
+               id="dateInput" onchange="onDate(this.value)" />
+      </div>
 
-        <!-- STEG 1: välj datum och tid -->
-        <div class="roomSearch">
+      <!-- STEG 2: Rum och tid -->
+      <div id="step2" class="locked" style="margin-top:1.5rem;">
+        <p class="secLabel">Välj rum och tid</p>
+        <div class="roomsContainer">
 
-            <div class="formGroup">
-                <label>Datum</label>
-                <input type="date" name="Date">
+          @foreach (var room in Model.Rooms)
+          {
+            <div class="roomCard" id="card-@room.Id">
+              <div class="roomName">@room.Name</div>
+              <div class="roomCap">@room.Capacity personer</div>
+
+              @foreach (var slot in Model.TimeSlots)
+              {
+                if (slot.IsBooked)
+                {
+                  <button class="timeButton booked" disabled>@slot.Label</button>
+                }
+                else
+                {
+                  <button type="button" class="timeButton"
+                    onclick="pick('@room.Name', @room.Capacity, '@slot.Value', '@slot.Label', this, @room.Id)">
+                    @slot.Label
+                  </button>
+                }
+              }
             </div>
-
-            <div class="formGroup">
-                <label>Starttid</label>
-                <input type="time" name="StartTime">
-            </div>
-
-            <div class="formGroup">
-                <label>Sluttid</label>
-                <input type="time" name="EndTime">
-            </div>
-
-            <button class="roomSubmit">
-                Visa tillgängliga rum
-            </button>
+          }
 
         </div>
+      </div>
 
-        <!-- STEG 2: visa rum -->
-        <div class="availableRooms">
+      <!-- STEG 3: Bekräfta -->
+      <div id="step3" class="locked">
+        <hr class="divider" />
 
-            <h2>Tillgängliga rum</h2>
-
-            <div class="roomCard">
-                <p><strong>Rum London</strong> – 4 personer</p>
-                <span class="available">Ledigt</span>
-                <button>Boka</button>
-            </div>
-
-            <div class="roomCard">
-                <p><strong>Rum Rom</strong> – 6 personer</p>
-                <span class="unavailable">Upptaget</span>
-            </div>
-
-            <div class="roomCard">
-                <p><strong>Rum Paris</strong> – 8 personer</p>
-                <span class="available">Ledigt</span>
-                <button>Boka</button>
-            </div>
-
+        <!-- Inloggad användare — hämtas automatiskt -->
+        <div class="userConfirmBox">
+          <div class="userAvatar">
+            @(User.Identity!.Name?.Substring(0,2).ToUpper())
+          </div>
+          <div>
+            <div class="userBookedBy">Bokas av</div>
+            <div class="userName">@User.Identity.Name</div>
+            <div class="userEmail">@User.FindFirstValue(ClaimTypes.Email)</div>
+          </div>
         </div>
 
-    </div>
+        <div class="purposeGroup">
+          <label>Syfte (valfritt)</label>
+          <input type="text" asp-for="Purpose"
+                 placeholder="t.ex. gruppmöte, presentation, studiegrupp..." />
+        </div>
 
-    <div class="bookingImageRight">
-        <img src="/images/library.jpg" alt="Library">
-    </div>
+        <p class="secLabel">Sammanfattning</p>
+        <div class="summaryBox">
+          <div class="summaryRow">
+            <span class="sumLabel">Datum</span>
+            <span class="sumVal empty" id="s-date">—</span>
+          </div>
+          <div class="summaryRow">
+            <span class="sumLabel">Rum</span>
+            <span class="sumVal empty" id="s-room">—</span>
+          </div>
+          <div class="summaryRow">
+            <span class="sumLabel">Tid</span>
+            <span class="sumVal empty" id="s-time">—</span>
+          </div>
+          <div class="summaryRow">
+            <span class="sumLabel">Bokad av</span>
+            <span class="sumVal">@User.Identity.Name</span>
+          </div>
+        </div>
 
+        <button type="submit" class="roomSubmit" id="bookBtn" disabled>
+          Bekräfta bokning
+        </button>
+        <div class="confirmMsg" id="confirmMsg">
+          Bokning bekräftad! Du får en bekräftelse via e-post.
+        </div>
+      </div>
+
+    </form>
+  </div>
 </div>
+
+@section Scripts {
+<script>
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('dateInput').value = today;
+
+  function fmt(v) {
+    const p = v.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+
+  function dot(id, cls, txt) {
+    const d = document.getElementById(id);
+    d.className = 'stepDot ' + cls;
+    if (txt) d.textContent = txt;
+  }
+
+  function lbl(id, on) {
+    document.getElementById(id).className = 'stepLabel' + (on ? ' active' : '');
+  }
+
+  function onDate(v) {
+    document.getElementById('s-date').textContent = fmt(v);
+    document.getElementById('s-date').className = 'sumVal';
+    document.getElementById('step2').classList.remove('locked');
+    dot('n1', 'done', '✓'); lbl('l1', false);
+    dot('n2', 'active', '2'); lbl('l2', true);
+  }
+
+  function pick(room, cap, time, label, btn, roomId) {
+    document.querySelectorAll('.timeButton.selected').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.roomCard.selected').forEach(c => c.classList.remove('selected'));
+
+    btn.classList.add('selected');
+    document.getElementById('card-' + roomId).classList.add('selected');
+
+    document.getElementById('hiddenRoomId').value = roomId;
+    document.getElementById('hiddenTimeSlot').value = time;
+
+    document.getElementById('s-room').textContent = room + ' (' + cap + ' pers.)';
+    document.getElementById('s-room').className = 'sumVal';
+    document.getElementById('s-time').textContent = label;
+    document.getElementById('s-time').className = 'sumVal';
+
+    document.getElementById('step3').classList.remove('locked');
+    dot('n2', 'done', '✓'); lbl('l2', false);
+    dot('n3', 'active', '3'); lbl('l3', true);
+    document.getElementById('bookBtn').disabled = false;
+  }
+</script>
+}

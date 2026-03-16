@@ -1,4 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using RoomService.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<RoomDbContext>(options =>
+    options.UseSqlite("Data Source=rooms.db"));
 
 // Add services to the container.
 
