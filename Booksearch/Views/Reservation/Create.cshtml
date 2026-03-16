@@ -1,0 +1,46 @@
+﻿@model Booksearch.ViewModels.ReservationCreateVm
+
+@{
+    ViewData["Title"] = "Reservera bok";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Reservation.css"/>
+}
+
+<h1 class="bookRentalContainerTitle">Reservera: @Model.BookTitle</h1>
+
+<div class="bookRentalContainer">
+    <div class="reservationCard">
+        <p class="reservationInfo">
+            Reservera boken om den redan är utlånad. Du hamnar då sist i kön.
+        </p>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="BookId" />
+            <input type="hidden" asp-for="BookTitle" />
+
+            <div class="reservationField">
+                <label asp-for="UserName">Namn</label>
+                <input asp-for="UserName" class="reservationInput" />
+                <span asp-validation-for="UserName" class="reservationError"></span>
+            </div>
+
+            <div asp-validation-summary="All" class="reservationError"></div>
+
+            <button type="submit" class="reservationBtn">Ställ mig i kö</button>
+        </form>
+
+        <div class="reservationLinks">
+            <a asp-action="Queue" asp-route-bookId="@Model.BookId">Visa kö</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
