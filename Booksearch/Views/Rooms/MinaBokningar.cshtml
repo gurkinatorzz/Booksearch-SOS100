@@ -1,0 +1,94 @@
+﻿@model List<Booksearch.ViewModels.RoomBookingListVM>
+@{
+    ViewData["Title"] = "Mina Bokningar";
+    var aktiva = Model.Where(b => !b.IsHistory).ToList();
+    var historik = Model.Where(b => b.IsHistory).ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/rooms.css" />
+}
+
+<div class="bookingSection">
+  <div class="bookingFormBox">
+
+    <h1>Mina bokningar</h1>
+    <p class="pageSubText">Här ser du dina aktiva bokningar och historik</p>
+
+    <!-- AKTIVA BOKNINGAR -->
+    <p class="secLabel">Aktiva bokningar</p>
+    @if (!aktiva.Any())
+    {
+      <div class="emptyMsg">
+        <p>Du har inga kommande bokningar.</p>
+      </div>
+    }
+    else
+    {
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:1.5rem;">
+        @foreach (var booking in aktiva)
+        {
+          <div class="bookingCard">
+            <div class="bookingCardInfo">
+              <div class="bookingCardRoom">@booking.RoomName</div>
+              <div class="bookingCardTime">
+                @booking.StartTime.ToString("dd/MM/yyyy HH:mm") –
+                @booking.EndTime.ToString("HH:mm")
+              </div>
+              @if (!string.IsNullOrEmpty(booking.Purpose))
+              {
+                <div class="bookingCardPurpose">@booking.Purpose</div>
+              }
+            </div>
+            <form asp-action="AvbokaGrupprum" method="post">
+              @Html.AntiForgeryToken()
+              <input type="hidden" name="id" value="@booking.Id" />
+              <button type="submit" class="avbokaBtn">Avboka</button>
+            </form>
+          </div>
+        }
+      </div>
+    }
+
+    <hr class="divider" />
+
+    <!-- HISTORIK -->
+    <p class="secLabel">Historik</p>
+    @if (!historik.Any())
+    {
+      <div class="emptyMsg">
+        <p>Ingen bokningshistorik än.</p>
+      </div>
+    }
+    else
+    {
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:1.5rem;">
+        @foreach (var booking in historik)
+        {
+          <div class="bookingCard bookingCardHistory">
+            <div class="bookingCardInfo">
+              <div class="bookingCardRoom">@booking.RoomName</div>
+              <div class="bookingCardTime">
+                @booking.StartTime.ToString("dd/MM/yyyy HH:mm") –
+                @booking.EndTime.ToString("HH:mm")
+              </div>
+              @if (!string.IsNullOrEmpty(booking.Purpose))
+              {
+                <div class="bookingCardPurpose">@booking.Purpose</div>
+              }
+            </div>
+            <span class="historyBadge">Avslutad</span>
+          </div>
+        }
+      </div>
+    }
+
+    <div style="margin-top:1rem;">
+      <a asp-action="BokaGrupprum" class="roomSubmit"
+         style="display:block; text-align:center; text-decoration:none;">
+        Boka nytt rum
+      </a>
+    </div>
+
+  </div>
+</div>

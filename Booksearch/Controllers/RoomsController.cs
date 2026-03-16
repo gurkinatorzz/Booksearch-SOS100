@@ -11,12 +11,14 @@ public class RoomsController : Controller
 {
     private readonly HttpClient _httpClient;
 
-    public RoomsController()
+    public RoomsController(IConfiguration config)
     {
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("http://localhost:5091/");
+        _httpClient.BaseAddress = new Uri(config["RoomServiceAdress"] ?? "http://localhost:5091/");
+        _httpClient.DefaultRequestHeaders.Add("X-API-KEY", config["RoomServiceApiKey"] ?? "");
     }
 
+    // GET - bokningssidan
     public async Task<IActionResult> BokaGrupprum()
     {
         var rooms = new List<RoomOption>();
@@ -57,6 +59,7 @@ public class RoomsController : Controller
         return View(vm);
     }
 
+    // POST - skickar bokning
     [HttpPost]
     public async Task<IActionResult> BokaGrupprum(RoomBookingVM vm)
     {
@@ -73,6 +76,38 @@ public class RoomsController : Controller
 
         await _httpClient.PostAsync("api/roombookings", content);
 
-        return RedirectToAction("BokaGrupprum");
+        return RedirectToAction("MinaBokningar");
+    }
+
+    // GET - visa bokningar
+    public async Task<IActionResult> MinaBokningar()
+    {
+        var bookings = new List<RoomBookingListVM>();
+
+        try
+        {
+            var response = await _httpClient.GetAsync("api/roombookings");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                bookings = JsonSerializer.Deserialize<List<RoomBookingListVM>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    ?? new();
+            }
+        }
+        catch
+        {
+            // RoomService inte igång
+        }
+
+        return View(bookings);
+    }
+
+    // POST - avboka
+    [HttpPost]
+    public async Task<IActionResult> AvbokaGrupprum(int id)
+    {
+        await _httpClient.DeleteAsync($"api/roombookings/{id}");
+        return RedirectToAction("MinaBokningar");
     }
 }

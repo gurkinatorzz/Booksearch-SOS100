@@ -4,10 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RoomDbContext>(options =>
     options.UseSqlite("Data Source=rooms.db"));
 
-// Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<RoomService.Filters.ApiKeyFilter>();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.AddService<RoomService.Filters.ApiKeyFilter>();
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

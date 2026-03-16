@@ -301,3 +301,86 @@ a:hover, button:hover {
     border: none;
   }
 }
+
+/* ===== PROFIL DROPDOWN (Ruqia) ===== */
+
+.profileWrap {
+  position: relative;
+}
+
+.profileBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.profileBtn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.profileDropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 36px;
+  background: white;
+  border: 1px solid #e8ddd4;
+  border-radius: 12px;
+  min-width: 190px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  overflow: hidden;
+  z-index: 999;
+}
+
+.profileDropdown.open {
+  display: block;
+}
+
+.dropdownHeader {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e8ddd4;
+  background: #faf7f5;
+}
+
+.dropdownName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2c1810;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2c1810 !important;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.dropdownItem:hover {
+  background: #f5ede8 !important;
+  color: #8B3A2A !important;
+}
+
+.dropdownDivider {
+  border: none;
+  border-top: 1px solid #e8ddd4;
+  margin: 0;
+}
+
+.dropdownLogout {
+  color: #8B3A2A;
+  font-weight: 700;
+}
+
+.dropdownLogout:hover {
+  background: #f9ebe7;
+  color: #6B2A1A;
+}
