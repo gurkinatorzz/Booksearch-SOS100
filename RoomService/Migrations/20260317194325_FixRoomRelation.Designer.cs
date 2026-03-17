@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomService.Data;
 
@@ -10,9 +11,11 @@ using RoomService.Data;
 namespace RoomService.Migrations
 {
     [DbContext(typeof(RoomDbContext))]
-    partial class RoomDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260317194325_FixRoomRelation")]
+    partial class FixRoomRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
@@ -56,10 +59,6 @@ namespace RoomService.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -1,4 +1,6 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace RoomService.Models;
 
 public class RoomBooking
@@ -10,6 +12,9 @@ public class RoomBooking
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 
-    // Navigeringsproperty — kopplingen till Room-tabellen
-    public Room Room { get; set; } = null!;
+    [JsonIgnore]
+    public Room? Room { get; set; }  
+    
+    public string Status { get; set; } = "Aktiv";
+
 }
