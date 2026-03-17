@@ -1,10 +1,10 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booksearch", "Booksearch\Booksearch.csproj", "{0BCD228A-61EB-4904-8262-17EDBF8FE618}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomService", "RoomService\RoomService.csproj", "{134CBC9C-DD0B-41C6-A7D8-C50EF33FF5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA100-bookLibrary", "SOA100-bookLibrary\SOA100-bookLibrary.csproj", "{0E12073C-9D0C-4649-AD09-75A053F4151C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLoanService", "BookLoanService\BookLoanService.csproj", "{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}"
 EndProject
@@ -22,13 +22,9 @@ Global
 		{134CBC9C-DD0B-41C6-A7D8-C50EF33FF5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{134CBC9C-DD0B-41C6-A7D8-C50EF33FF5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{134CBC9C-DD0B-41C6-A7D8-C50EF33FF5B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E12073C-9D0C-4649-AD09-75A053F4151C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E12073C-9D0C-4649-AD09-75A053F4151C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E12073C-9D0C-4649-AD09-75A053F4151C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E12073C-9D0C-4649-AD09-75A053F4151C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

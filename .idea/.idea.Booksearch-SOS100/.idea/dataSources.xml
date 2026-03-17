@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="users" uuid="9bfcb025-2084-4489-8f8f-f953acdf594f">
+    <data-source source="LOCAL" name="bookloan-service-dev" uuid="7d89ce1a-5562-4efb-a202-302af40d7f43">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/UserService/users.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="book-library-dev" uuid="2a987ed5-75d2-4363-a2f9-f0fd6f60deba">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/SOA100-bookLibrary/book-library-dev.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/BookLoanService/bookloan-service-dev.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

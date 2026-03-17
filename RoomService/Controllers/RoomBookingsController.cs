@@ -22,7 +22,7 @@ public class RoomBookingsController : ControllerBase
         return await _context.RoomBookings.ToListAsync();
     }
 
-    [HttpPost]
+   
     [HttpPost]
     public async Task<ActionResult<RoomBooking>> CreateBooking(RoomBooking booking)
     {
@@ -43,7 +43,25 @@ public class RoomBookingsController : ControllerBase
         return booking;
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBooking(int id, RoomBooking booking)
+    {
+        if (id != booking.Id)
+            return BadRequest();
 
+        var existing = await _context.RoomBookings.FindAsync(id);
+        if (existing == null)
+            return NotFound();
+
+        existing.RoomId    = booking.RoomId;
+        existing.BookedBy  = booking.BookedBy;
+        existing.StartTime = booking.StartTime;
+        existing.EndTime   = booking.EndTime;
+        existing.Purpose   = booking.Purpose;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBooking(int id)
     {

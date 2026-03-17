@@ -24,3 +24,15 @@ public class TimeSlotOption
     public string Label { get; set; } = string.Empty;
     public bool IsBooked { get; set; }
 }
+
+public class RoomBookingListVM
+{
+    public int Id { get; set; }
+    public string RoomName { get; set; } = string.Empty;
+    public string BookedBy { get; set; } = string.Empty;
+    public string Purpose { get; set; } = string.Empty;
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public bool IsHistory => EndTime < DateTime.Now; 
+
+}
