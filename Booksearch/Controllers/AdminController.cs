@@ -12,9 +12,5 @@ public class AdminController : Controller
     {
         return View();
     }
-    public async Task<IActionResult> SignOutUser()
-    {
-        await HttpContext.SignOutAsync("Cookies");
-        return RedirectToAction("Index", "Home");
-    }
+    
 }
