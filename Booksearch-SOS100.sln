@@ -1,10 +1,12 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booksearch", "Booksearch\Booksearch.csproj", "{0BCD228A-61EB-4904-8262-17EDBF8FE618}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomService", "RoomService\RoomService.csproj", "{134CBC9C-DD0B-41C6-A7D8-C50EF33FF5B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLoanService", "BookLoanService\BookLoanService.csproj", "{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
