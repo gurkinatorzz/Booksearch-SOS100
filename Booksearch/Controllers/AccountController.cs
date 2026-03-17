@@ -42,4 +42,11 @@ public class AccountController : Controller
         // Gå tillbaka via returnUrl
         return Redirect(returnUrl);
     }
+    
+    // Logga ut 
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Index", "Home");
+    }
 }

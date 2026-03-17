@@ -23,15 +23,6 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
 /*--------------------------------------------------------------------------------*/
 builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
 
-// (Ruqias del- RöRR EJ )
-/*builder.Services.AddAuthentication("Cookies")
-    .AddCookie("Cookies", options =>
-    {
-        options.LoginPath = "/Account/Login";
-    });
-// ↑ SLUT
-*/
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
