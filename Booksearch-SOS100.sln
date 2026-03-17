@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booksearch", "Booksearch\Booksearch.csproj", "{0BCD228A-61EB-4904-8262-17EDBF8FE618}"
 EndProject
@@ -26,5 +26,7 @@ Global
 		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2C67E50-00F0-4DBC-A90B-A9EB9C3A6517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
