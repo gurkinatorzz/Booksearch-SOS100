@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Booksearch.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Booksearch.Controllers;
 
@@ -22,3 +23,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+

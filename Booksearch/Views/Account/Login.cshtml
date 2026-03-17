@@ -1,0 +1,19 @@
+﻿@model Booksearch.ViewModels.LoginVM
+
+<h1>Login</h1>
+<form asp-action="Login" asp-controller="Account" method="post" asp-route-returnUrl="@ViewBag.ReturnUrl">
+    <table>
+        <tr>
+            <td>Username</td>
+            <td><input asp-for="Username"/></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" asp-for="Password"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Login"/></td>
+        </tr>
+    </table>
+    <span style="color:red">@ViewBag.ErrorMessage</span>
+</form>
