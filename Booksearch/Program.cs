@@ -21,6 +21,17 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
     
 });
 /*--------------------------------------------------------------------------------*/
+
+// Add HttpClient for UserService API
+builder.Services.AddHttpClient<UserApiService>((serviceProvider, httpClient) =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    
+    // Get UserService address from config
+    string baseUrl = config.GetValue<string>("UserService:BaseUrl") ?? "https://localhost:7001";
+    httpClient.BaseAddress = new Uri(baseUrl);
+});
+
 builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -28,6 +39,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";
     });
+
+builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
+
 
 var app = builder.Build();
 

@@ -17,6 +17,33 @@ namespace UserService.Controllers
             _context = context;
         }
 
+        // API Key validation endpoint
+        [HttpGet("validate")]
+        public IActionResult ValidateApiKey()
+        {
+            // If we reach here, the API key is valid (middleware passed)
+            return Ok(new
+            {
+                Valid = true,
+                Service = "UserService",
+                Timestamp = DateTime.UtcNow,
+                Message = "API Key is valid"
+            });
+        }
+        
+        // Health check endpoint (no API key required - handled by middleware)
+        [HttpGet("health")]
+        public IActionResult Health()
+        {
+            return Ok(new
+            {
+                Status = "Healthy",
+                Service = "UserService",
+                Timestamp = DateTime.UtcNow,
+                UserCount = _context.Users.Count()
+            });
+        }
+/* ------------------------------------------------------------------------- */
         // GET: api/users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
