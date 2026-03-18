@@ -31,8 +31,17 @@ builder.Services.AddHttpClient<LoanService>((serviceProvider, httpClient) =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext  = services.GetRequiredService<BookLoanServiceDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 // if ( app.Environment.IsDevelopment())
+
+
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
