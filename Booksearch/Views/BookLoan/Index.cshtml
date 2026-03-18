@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<Booksearch.Models.BookLoan>
+@{
     ViewData["Title"] = "Utlåning";
 }
 
@@ -25,9 +26,32 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td colspan="5">Inga aktiva lån ännu.</td>
-        </tr>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var loan in Model)
+            {
+                <tr>
+                    <td>@loan.BookTitle</td>
+                    <td>@loan.BorrowerName</td>
+                    <td>@loan.LoanDate</td>
+                    <td>@loan.DueDate</td>
+                    <td>
+                        
+                        <a asp-action="Edit" asp-route-id="@loan.Id">Ändra</a>
+                        <form asp-action="Return" method="post">
+                            <input type="hidden" name="id" value="@loan.Id"/>
+                            <button type="submit">Återlämna</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Inga aktiva lån ännu.</td>
+            </tr>
+        }
         </tbody>
     </table>
 </section>

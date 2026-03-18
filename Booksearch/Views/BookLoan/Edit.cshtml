@@ -1,0 +1,27 @@
+﻿@model Booksearch.Models.BookLoan
+
+<h1>Ändra lån</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="BookId" value="@Model.BookId" />
+    <input type="hidden" name="BookTitle" value="@Model.BookTitle" />
+    <input type="hidden" name="BorrowerName" value="@Model.BorrowerName" />
+
+    <p>Bok: @Model.BookTitle</p>
+    <p>Låntagare: @Model.BorrowerName</p>
+
+    <label>Lånedatum:</label>
+    <input type="datetime-local" value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")" readonly />
+    <input type="hidden" name="LoanDate" value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")" />
+    
+
+    <br />
+
+    <label>Återlämningsdatum:</label>
+    <input type="datetime-local" name="DueDate" value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
+
+    <br />
+
+    <button type="submit">Spara ändringar</button>
+</form>

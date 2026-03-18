@@ -1,4 +1,20 @@
-﻿@model List<Booksearch.Models.BookLibraryDtos.BookListDto>
+﻿<h1>Låna bok</h1>
+<p>Bok: @ViewBag.BookTitle</p>
 
 
-<h1>Test123</h1>
+
+<form asp-action="Create" method="post">
+    
+    <input type="hidden" name="BookId" value="@ViewBag.BookId" />
+    <input type="hidden" name="BookTitle" value="@ViewBag.BookTitle" />
+    
+    <button type="submit">Låna bok</button>
+    
+    <label>Lånedatum:</label>
+    <input type="datetime-local" name="LoanDate" />
+
+    <br />
+
+    <label>Återlämningsdatum:</label>
+    <input type="datetime-local" name="DueDate" />
+</form>

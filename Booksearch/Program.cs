@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//WIlliam --- RÖR EJ
+//Lägg till httpclient till BookLoan
+builder.Services.AddHttpClient<BookLoanApiService>();
 
 /*------------------GUSTAVS RÖR EJ!!!---------------------------------------------*/
 //Lägg till HttpClient till BookLibrary API (Gustavs):

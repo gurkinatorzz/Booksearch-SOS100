@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="bookloan-service-dev" uuid="7d89ce1a-5562-4efb-a202-302af40d7f43">
+    <data-source source="LOCAL" name="roomsv3" uuid="eb72d606-5e62-4b92-a06a-13e7ecf21e73">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/RoomService/roomsv3.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="bookloan-service-dev" uuid="85362151-d2fa-4b6f-8539-886cacbe883c">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/BookLoanService/bookloan-service-dev.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="roomsv3" uuid="eb72d606-5e62-4b92-a06a-13e7ecf21e73">
+    <data-source source="LOCAL" name="users" uuid="a4d7fcf5-5c77-48e0-b840-e07587d57b13">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/RoomService/roomsv3.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/UserService/users.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
