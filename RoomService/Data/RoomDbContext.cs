@@ -10,8 +10,10 @@ public class RoomDbContext : DbContext
     {
     }
 
-    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Room> Rooms { get; set; } 
     public DbSet<RoomBooking> RoomBookings { get; set; }
+    
+    public DbSet<RoomReview> RoomReviews { get; set; }  
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

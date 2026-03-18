@@ -9,6 +9,7 @@ public class RoomBookingVM
     public string TimeSlot { get; set; } = string.Empty;
     public List<RoomOption> Rooms { get; set; } = new();
     public List<TimeSlotOption> TimeSlots { get; set; } = new();
+    public List<RoomBookingListVM> Bookings { get; set; } = new();
 }
 
 public class RoomOption
@@ -28,6 +29,7 @@ public class TimeSlotOption
 public class RoomBookingListVM
 {
     public int Id { get; set; }
+    public int RoomId { get; set; }
     public string RoomName { get; set; } = string.Empty;
     public string BookedBy { get; set; } = string.Empty;
     public string Purpose { get; set; } = string.Empty;

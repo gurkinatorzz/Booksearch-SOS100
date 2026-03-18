@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RoomService.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RoomDbContext>(options =>
-    options.UseSqlite("Data Source=roomsv2.db")); 
+    options.UseSqlite("Data Source=roomsv3.db")); 
 
 
 builder.Services.AddScoped<RoomService.Filters.ApiKeyFilter>();

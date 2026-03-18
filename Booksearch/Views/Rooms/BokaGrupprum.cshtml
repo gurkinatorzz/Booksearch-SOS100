@@ -58,14 +58,21 @@
 
               @foreach (var slot in Model.TimeSlots)
               {
-                if (slot.IsBooked)
+                
+                var isBooked = Model.Bookings.Any(b =>
+                  b.RoomId == room.Id &&
+                  b.Status != "Avbokad" &&
+                  b.StartTime.ToString("HH:mm") == slot.Value &&
+                  b.StartTime.ToString("yyyy-MM-dd") == Model.BookingDate.ToString("yyyy-MM-dd"));
+
+                if (isBooked)
                 {
                   <button class="timeButton booked" disabled>@slot.Label</button>
                 }
                 else
                 {
                   <button type="button" class="timeButton"
-                    onclick="pick('@room.Name', @room.Capacity, '@slot.Value', '@slot.Label', this, @room.Id)">
+                          onclick="pick('@room.Name', @room.Capacity, '@slot.Value', '@slot.Label', this, @room.Id)">
                     @slot.Label
                   </button>
                 }
@@ -135,6 +142,17 @@
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('dateInput').value = today;
 
+  // Öppna steg 2 automatiskt om datum finns i URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const dateParam = urlParams.get('date');
+  if (dateParam) {
+    document.getElementById('dateInput').value = dateParam;
+    document.getElementById('s-date').textContent = fmt(dateParam);
+    document.getElementById('s-date').className = 'sumVal';
+    document.getElementById('step2').classList.remove('locked');
+    dot('n1', 'done', '✓'); lbl('l1', false);
+    dot('n2', 'active', '2'); lbl('l2', true);
+  }
   function fmt(v) {
     const p = v.split('-');
     return p[2] + '/' + p[1] + '/' + p[0];
@@ -151,11 +169,7 @@
   }
 
   function onDate(v) {
-    document.getElementById('s-date').textContent = fmt(v);
-    document.getElementById('s-date').className = 'sumVal';
-    document.getElementById('step2').classList.remove('locked');
-    dot('n1', 'done', '✓'); lbl('l1', false);
-    dot('n2', 'active', '2'); lbl('l2', true);
+    window.location.href = '/Rooms/BokaGrupprum?date=' + v;
   }
 
   function pick(room, cap, time, label, btn, roomId) {

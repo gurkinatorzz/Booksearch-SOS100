@@ -19,19 +19,27 @@ public class RoomsController : Controller
 
     // GET - bokningssidan
     [Authorize]
-    public async Task<IActionResult> BokaGrupprum()
+    public async Task<IActionResult> BokaGrupprum(string? date = null)
     {
+        var selectedDate = date != null ? DateTime.Parse(date) : DateTime.Today;
         var rooms = new List<RoomOption>();
+        var bookings = new List<RoomBookingListVM>();
 
         try
         {
-            var response = await _httpClient.GetAsync("api/rooms");
-
-            if (response.IsSuccessStatusCode)
+            var roomsResponse = await _httpClient.GetAsync("api/rooms");
+            if (roomsResponse.IsSuccessStatusCode)
             {
-                var json = await response.Content.ReadAsStringAsync();
-
+                var json = await roomsResponse.Content.ReadAsStringAsync();
                 rooms = JsonSerializer.Deserialize<List<RoomOption>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            }
+
+            var bookingsResponse = await _httpClient.GetAsync("api/roombookings");
+            if (bookingsResponse.IsSuccessStatusCode)
+            {
+                var json = await bookingsResponse.Content.ReadAsStringAsync();
+                bookings = JsonSerializer.Deserialize<List<RoomBookingListVM>>(json,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
             }
         }
@@ -48,12 +56,14 @@ public class RoomsController : Controller
         var vm = new RoomBookingVM
         {
             BookedBy = User.Identity?.Name!,
+            BookingDate = selectedDate,
             Rooms = rooms,
+            Bookings = bookings,
             TimeSlots = new List<TimeSlotOption>
             {
-                new() { Value = "10:00", Label = "10:00–11:00", IsBooked = false },
-                new() { Value = "12:00", Label = "12:00–13:00", IsBooked = false },
-                new() { Value = "14:00", Label = "14:00–15:00", IsBooked = false }
+                new() { Value = "10:00", Label = "10:00–12:00", IsBooked = false },
+                new() { Value = "12:00", Label = "12:00–14:00", IsBooked = false },
+                new() { Value = "14:00", Label = "14:00–16:00", IsBooked = false }
             }
         };
 
@@ -66,7 +76,7 @@ public class RoomsController : Controller
     public async Task<IActionResult> BokaGrupprum(RoomBookingVM vm)
     {
         var start = DateTime.Parse($"{vm.BookingDate:yyyy-MM-dd} {vm.TimeSlot}");
-        var end = start.AddHours(1);
+        var end = start.AddHours(2);
 
         var booking = new
         {
@@ -78,15 +88,14 @@ public class RoomsController : Controller
         };
 
         var json = JsonSerializer.Serialize(booking);
-
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-
         var response = await _httpClient.PostAsync("api/roombookings", content);
 
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            return Content($"Fel från API: {response.StatusCode} - {error}");        }
+            return Content($"Fel från API: {response.StatusCode} - {error}");
+        }
 
         return RedirectToAction("BokningBekraftad");
     }
@@ -102,15 +111,14 @@ public class RoomsController : Controller
     public async Task<IActionResult> MinaBokningar()
     {
         var bookings = new List<RoomBookingListVM>();
+        var rooms = new List<RoomOption>();
 
         try
         {
             var response = await _httpClient.GetAsync("api/roombookings");
-
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-
                 bookings = JsonSerializer.Deserialize<List<RoomBookingListVM>>(json,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
 
@@ -118,6 +126,20 @@ public class RoomsController : Controller
                     .Where(b => b.BookedBy != null &&
                                 b.BookedBy.Equals(User.Identity!.Name, StringComparison.OrdinalIgnoreCase))
                     .ToList();
+            }
+
+            var roomsResponse = await _httpClient.GetAsync("api/rooms");
+            if (roomsResponse.IsSuccessStatusCode)
+            {
+                var json = await roomsResponse.Content.ReadAsStringAsync();
+                rooms = JsonSerializer.Deserialize<List<RoomOption>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            }
+
+            foreach (var b in bookings)
+            {
+                var room = rooms.FirstOrDefault(r => r.Id == b.RoomId);
+                if (room != null) b.RoomName = room.Name;
             }
         }
         catch
@@ -128,7 +150,6 @@ public class RoomsController : Controller
         return View(bookings);
     }
 
-    
     // POST - avboka
     [HttpPost]
     public async Task<IActionResult> AvbokaGrupprum(int id)

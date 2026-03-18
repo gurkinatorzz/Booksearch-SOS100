@@ -73,3 +73,4 @@ X-API-KEY: ruqia-rooms-secret-key-2024
 GET {{RoomService_HostAddress}}/api/rooms/available?startTime=2026-03-15T09:00:00&endTime=2026-03-15T11:00:00
 Accept: application/json
 X-API-KEY: ruqia-rooms-secret-key-2024
+

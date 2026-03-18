@@ -28,9 +28,9 @@
 }
 
 .pageSubText {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #6b7280;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 /* ===== STEG-INDIKATOR ===== */
@@ -38,7 +38,7 @@
 .stepsRow {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .stepItem {
@@ -113,7 +113,7 @@
     font-size: 0.85rem;
     color: #111;
     background: #fff;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 /* ===== RUMLÅS ===== */
@@ -129,7 +129,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .roomCard {
@@ -186,10 +186,11 @@
 }
 
 .timeButton.booked {
-    background: #f3f4f6;
-    color: #d1d5db;
+    background: #FCEBEB;
+    color: #A32D2D;
     text-decoration: line-through;
     cursor: not-allowed;
+    border-color: #F09595;
 }
 
 /* ===== AVDELARE ===== */
@@ -197,7 +198,7 @@
 .divider {
     border: none;
     border-top: 1px solid #e5e7eb;
-    margin: 0.75rem 0;
+    margin: 0.5rem 0;
 }
 
 /* ===== ANVÄNDARKORT ===== */
@@ -206,8 +207,8 @@
     background: #E6F1FB;
     border: 1px solid #B5D4F4;
     border-radius: 10px;
-    padding: 0.6rem 0.9rem;
-    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -248,7 +249,7 @@
 /* ===== SYFTE-FÄLT ===== */
 
 .purposeGroup {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .purposeGroup label {
@@ -273,8 +274,8 @@
 .summaryBox {
     background: #f9fafb;
     border-radius: 10px;
-    padding: 0.6rem 0.9rem;
-    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .summaryRow {
@@ -305,7 +306,7 @@
 .roomSubmit {
     width: 100%;
     padding: 11px;
-    background: #378ADD;
+    background: #deab7f;
     color: white;
     border: none;
     border-radius: 9px;
@@ -398,4 +399,87 @@
     color: #6b7280;
     border-radius: 20px;
     border: 1px solid #e5e7eb;
+}
+
+/* ===== PROFIL DROPDOWN (Ruqia) ===== */
+
+.profileWrap {
+    position: relative;
+}
+
+.profileBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.profileBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.profileDropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 36px;
+    background: white;
+    border: 1px solid #e8ddd4;
+    border-radius: 12px;
+    min-width: 190px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    z-index: 999;
+}
+
+.profileDropdown.open {
+    display: block;
+}
+
+.dropdownHeader {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e8ddd4;
+    background: #faf7f5;
+}
+
+.dropdownName {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c1810;
+}
+
+.dropdownItem {
+    display: block;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c1810 !important;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.dropdownItem:hover {
+    background: #ede0d8 !important;
+    color: #6B2A1A !important;
+}
+
+.dropdownDivider {
+    border: none;
+    border-top: 1px solid #e8ddd4;
+    margin: 0;
+}
+
+.dropdownLogout {
+    color: #8B3A2A;
+    font-weight: 700;
+}
+
+.dropdownLogout:hover {
+    background: #f9ebe7;
+    color: #6B2A1A;
 }

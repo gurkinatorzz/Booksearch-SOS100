@@ -15,7 +15,16 @@ public class RoomsController : ControllerBase
     {
         _context = context;
     }
-
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteRoom(int id)
+    {
+        var room = await _context.Rooms.FindAsync(id);
+        if (room == null) return NotFound();
+    
+        _context.Rooms.Remove(room);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
     // GET: api/rooms
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Room>>> GetRooms()

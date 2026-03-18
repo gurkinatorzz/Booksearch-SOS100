@@ -30,7 +30,8 @@ public class RoomBookingsController : ControllerBase
             .AnyAsync(b =>
                 b.RoomId == booking.RoomId &&
                 b.StartTime < booking.EndTime &&
-                b.EndTime > booking.StartTime);
+                b.EndTime > booking.StartTime &&
+                b.Status != "Avbokad");
 
         if (conflict)
         {
