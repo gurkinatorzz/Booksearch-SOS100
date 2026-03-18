@@ -1,12 +1,14 @@
-@RoomService_HostAddress = http://localhost:5091
+@RoomService_HostAddress = https://app-sos100-roomservice.azurewebsites.net
 
 ###
 GET {{RoomService_HostAddress}}/api/rooms
 Accept: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 ###
 POST {{RoomService_HostAddress}}/api/rooms
 Content-Type: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 {
   "name": "London",
@@ -14,8 +16,29 @@ Content-Type: application/json
 }
 
 ###
+POST {{RoomService_HostAddress}}/api/rooms
+Content-Type: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
+
+{
+  "name": "Rom",
+  "capacity": 6
+}
+
+###
+POST {{RoomService_HostAddress}}/api/rooms
+Content-Type: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
+
+{
+  "name": "Paris",
+  "capacity": 8
+}
+
+###
 POST {{RoomService_HostAddress}}/api/roombookings
 Content-Type: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 {
   "roomId": 1,
@@ -27,13 +50,16 @@ Content-Type: application/json
 ###
 GET {{RoomService_HostAddress}}/api/roombookings
 Accept: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 ###
 DELETE {{RoomService_HostAddress}}/api/roombookings/1
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 ###
 PUT {{RoomService_HostAddress}}/api/roombookings/1
 Content-Type: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024
 
 {
   "id": 1,
@@ -46,3 +72,4 @@ Content-Type: application/json
 ###
 GET {{RoomService_HostAddress}}/api/rooms/available?startTime=2026-03-15T09:00:00&endTime=2026-03-15T11:00:00
 Accept: application/json
+X-API-KEY: ruqia-rooms-secret-key-2024

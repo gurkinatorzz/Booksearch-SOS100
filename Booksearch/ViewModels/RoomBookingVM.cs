@@ -33,6 +33,6 @@ public class RoomBookingListVM
     public string Purpose { get; set; } = string.Empty;
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
-    public bool IsHistory => EndTime < DateTime.Now; 
-
+    public string Status { get; set; } = "Aktiv";
+    public bool IsHistory => EndTime < DateTime.Now || Status == "Avbokad";
 }

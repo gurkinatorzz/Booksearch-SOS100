@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Avbokning klar";
+}
+
+<div style="display:flex; justify-content:center; align-items:center; flex-direction:column; text-align:center; padding:80px 0;">
+    <h2 style="margin-bottom:10px;">Bokningen är avbokad!</h2>
+    <p style="margin-bottom:20px;">Din rumsbokning har tagits bort.</p>
+
+    <a asp-controller="Rooms" asp-action="BokaGrupprum" class="btn btn-primary">
+        Boka nytt rum
+    </a>
+</div>

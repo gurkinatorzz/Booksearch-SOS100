@@ -75,4 +75,14 @@ public class RoomBookingsController : ControllerBase
 
         return NoContent();
     }
+    [HttpPut("avboka/{id}")]
+    public async Task<IActionResult> AvbokaBooking(int id)
+    {
+        var booking = await _context.RoomBookings.FindAsync(id);
+        if (booking == null) return NotFound();
+    
+        booking.Status = "Avbokad";
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 }

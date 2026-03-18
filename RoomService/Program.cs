@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RoomService.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RoomDbContext>(options =>
-    options.UseSqlite("Data Source=rooms.db"));
+    options.UseSqlite("Data Source=roomsv2.db")); 
 
 
 builder.Services.AddScoped<RoomService.Filters.ApiKeyFilter>();
@@ -12,9 +12,15 @@ builder.Services.AddControllers(options =>
 });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
+    db.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

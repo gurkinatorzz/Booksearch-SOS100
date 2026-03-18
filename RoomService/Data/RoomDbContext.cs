@@ -11,6 +11,13 @@ public class RoomDbContext : DbContext
     }
 
     public DbSet<Room> Rooms { get; set; }
-
     public DbSet<RoomBooking> RoomBookings { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RoomBooking>()
+            .HasOne(b => b.Room)
+            .WithMany(r => r.Bookings)
+            .HasForeignKey(b => b.RoomId);
+    }
 }
