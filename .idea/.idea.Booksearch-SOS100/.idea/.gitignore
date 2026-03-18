@@ -1,3 +1,5 @@
+# Exclude entire .idea folder
+.idea/
 # Default ignored files
 /shelf/
 /workspace.xml
