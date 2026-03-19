@@ -7,8 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 //WIlliam --- RÖR EJ
 //Lägg till httpclient till BookLoan
-builder.Services.AddHttpClient<BookLoanApiService>();
+builder.Services.AddHttpClient<BookLoanApiService>((serviceProvider, httpClient) =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    string address = config.GetValue<string>("BookLoanService") ?? "";
 
+    httpClient.BaseAddress = new Uri(address);
+});
 /*------------------GUSTAVS RÖR EJ!!!---------------------------------------------*/
 //Lägg till HttpClient till BookLibrary API (Gustavs):
 builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient) =>
