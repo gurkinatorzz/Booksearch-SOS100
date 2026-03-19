@@ -11,10 +11,13 @@
     <button type="submit">Låna bok</button>
     
     <label>Lånedatum:</label>
-    <input type="datetime-local" name="LoanDate" />
+    <input type="datetime-local" name="LoanDate" 
+           value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+           readonly/>
 
     <br />
 
     <label>Återlämningsdatum:</label>
-    <input type="datetime-local" name="DueDate" />
+    <input type="datetime-local" name="DueDate" 
+           value="@DateTime.Now.AddDays(14).ToString("yyyy-MM-ddTHH:mm")" />
 </form>
