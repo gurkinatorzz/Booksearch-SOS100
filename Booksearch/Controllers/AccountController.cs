@@ -1,22 +1,13 @@
 ﻿using System.Security.Claims;
-using Booksearch.Services;
 using Booksearch.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booksearch.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserApiService _userApiService;
-
-    public AccountController(UserApiService userApiService)
-    {
-        _userApiService = userApiService;
-    }
-
     public IActionResult Login(string returnUrl)
     {
         ViewBag.ReturnUrl = returnUrl;
@@ -26,50 +17,33 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginVM account, string returnUrl)
     {
-        try
+        /* Hardcoded login credentials
+        bool accountValid = account.Username == "admin" && account.Password == "abc123";
+
+        // Check login credentials
+        if (accountValid == false)
         {
-            // Get all users from UserService
-            var users = await _userApiService.GetAllUsersAsync();
-            
-            // Find user by email (assuming username is email)
-            var user = users.FirstOrDefault(u => u.Email.Equals(account.Username, StringComparison.OrdinalIgnoreCase));
-            
-            if (user == null)
-            {
-                ViewBag.ErrorMessage = "Login failed: User not found";
-                ViewBag.ReturnUrl = returnUrl;
-                return View();
-            }
-            
-            
-            // Create claims for the authenticated user
-            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.Name));
-            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            
-            if (user.IsAdmin)
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-            }
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-
-            if (string.IsNullOrEmpty(returnUrl))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return Redirect(returnUrl);
-        }
-        catch (Exception ex)
-        {
-            ViewBag.ErrorMessage = $"Login failed: {ex.Message}";
+            ViewBag.ErrorMessage = "Login failed: Wrong username or password";
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        } */
+
+        // Create claims for the authenticated user
+        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+        identity.AddClaim(new Claim(ClaimTypes.Name, account.Username));
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+        // Redirect to return URL or Home
+        if (string.IsNullOrEmpty(returnUrl))
+        {
+            return RedirectToAction("Index", "Home");
         }
+
+        return Redirect(returnUrl);
     }
-    
+
+    // Logout action
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

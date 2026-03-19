@@ -35,7 +35,7 @@ public class BookLoanApiService
     }
     public async Task<List<BookLoan>> GetUserLoans(string username)
     {
-        var allLoans = await _httpClient.GetFromJsonAsync<List<BookLoan>>("api/BookLoan/active")
+        var allLoans = await _httpClient.GetFromJsonAsync<List<BookLoan>>($"api/BookLoan/user/{username}")
                        ?? new List<BookLoan>();
 
         return allLoans
