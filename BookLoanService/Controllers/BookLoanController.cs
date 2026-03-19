@@ -26,13 +26,24 @@ public class BookLoanController : ControllerBase
     }
 
     [HttpPost]
-    
-        public void PostBookLoan(BookLoan bookLoan)
+    public IActionResult PostBookLoan(BookLoan bookLoan)
+    {
+        var exists = _DbContext.BookLoans.Any(x =>
+            x.BookId == bookLoan.BookId &&
+            x.BorrowerName == bookLoan.BorrowerName &&
+            x.ReturnedDate == null
+        );
+
+        if (exists)
         {
-           _DbContext.BookLoans.Add(bookLoan);
-           _DbContext.SaveChanges();
-           
+            return BadRequest("Du har redan lånat denna bok.");
         }
+
+        _DbContext.BookLoans.Add(bookLoan);
+        _DbContext.SaveChanges();
+
+        return Ok();
+    }
         
     //Hämtar böcker som inte är återlämnade
     [HttpGet("active")]
@@ -65,6 +76,13 @@ public class BookLoanController : ControllerBase
 
             _DbContext.SaveChanges();
         }
+    }
+    [HttpGet("user/{username}")]
+    public BookLoan[] GetUserLoans(string username)
+    {
+        return _DbContext.BookLoans
+            .Where(x => x.BorrowerName == username && x.ReturnedDate == null)
+            .ToArray();
     }
     }
     

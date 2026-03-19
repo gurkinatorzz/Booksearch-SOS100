@@ -20,8 +20,8 @@ public class BookLoanController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var activeLoans = await _bookLoanApiService.GetActiveLoans();
-        return View(activeLoans);
+        var userLoans = await _bookLoanApiService.GetUserLoans(User.Identity!.Name!);
+        return View(userLoans);
     }
 
     public IActionResult Create(int bookId, string bookTitle)
@@ -32,12 +32,20 @@ public class BookLoanController : Controller
         return View();
     }
     [HttpPost]
-    public async Task<IActionResult> Create(Booksearch.Models.BookLoan bookLoan)
+    public async Task<IActionResult> Create(BookLoan bookLoan)
     {
         bookLoan.BorrowerName = User.Identity!.Name!;
-       
-        
-        await _bookLoanApiService.CreateLoan(bookLoan);
+
+        var success = await _bookLoanApiService.CreateLoan(bookLoan);
+
+        if (!success)
+        {
+            ViewBag.Error = "Du har redan lånat denna bok.";
+            ViewBag.BookId = bookLoan.BookId;
+            ViewBag.BookTitle = bookLoan.BookTitle;
+            return View();
+        }
+
         return RedirectToAction("Index");
     }
     [HttpPost]

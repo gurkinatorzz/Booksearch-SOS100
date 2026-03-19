@@ -8,7 +8,7 @@ public static class UserDbSeeder
     public static void Seed(UserDbContext context, PasswordHasher<User> passwordHasher)
     {
         // Only seed if database is empty
-        if (context.Users.Any())
+        if (context.Users.Any()) 
             return;
 
         var users = new List<User>
@@ -69,6 +69,7 @@ public static class UserDbSeeder
                 IsAdmin = false,
                 PasswordHash = passwordHasher.HashPassword(null, "Test123!")
             }
+            
         };
 
         context.Users.AddRange(users);

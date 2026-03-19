@@ -9,6 +9,13 @@
 <section class="loanContainer">
     
     <h1 class="loanTitle">Låna bok</h1>
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="errorMsg">
+            @ViewBag.Error
+        </div>
+    }
 
     <div class="formCard">
         <p class="bookTitle"><strong>Bok:</strong> @ViewBag.BookTitle</p>

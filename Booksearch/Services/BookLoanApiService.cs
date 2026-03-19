@@ -13,9 +13,10 @@ public class BookLoanApiService
         _httpClient = httpClient;
     }
 
-    public async Task CreateLoan(BookLoan model)
+    public async Task<bool> CreateLoan(BookLoan model)
     {
-        await _httpClient.PostAsJsonAsync("api/BookLoan", model);
+        var response = await _httpClient.PostAsJsonAsync("api/BookLoan", model);
+        return response.IsSuccessStatusCode;
     }
     
     public async Task<List<BookLoan>> GetActiveLoans()
@@ -31,5 +32,14 @@ public class BookLoanApiService
     public async Task UpdateLoan(BookLoan model)
     {
         await _httpClient.PutAsJsonAsync($"api/BookLoan/{model.Id}", model);
+    }
+    public async Task<List<BookLoan>> GetUserLoans(string username)
+    {
+        var allLoans = await _httpClient.GetFromJsonAsync<List<BookLoan>>("api/BookLoan/active")
+                       ?? new List<BookLoan>();
+
+        return allLoans
+            .Where(x => x.BorrowerName == username)
+            .ToList();
     }
 }
