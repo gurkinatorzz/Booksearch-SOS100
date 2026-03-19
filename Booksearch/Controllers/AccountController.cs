@@ -1,13 +1,22 @@
 ﻿using System.Security.Claims;
+using Booksearch.Services;
 using Booksearch.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booksearch.Controllers;
 
 public class AccountController : Controller
 {
+    private readonly UserApiService _userApiService;
+
+    public AccountController(UserApiService userApiService)
+    {
+        _userApiService = userApiService;
+    }
+
     public IActionResult Login(string returnUrl)
     {
         ViewBag.ReturnUrl = returnUrl;
@@ -17,33 +26,50 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginVM account, string returnUrl)
     {
-        // Kolla användarnamn och lösenord
-        bool accountValid = account.Username == "admin" && account.Password == "abc123";
-
-        // Fel användarnamn eller lösenord
-        if (accountValid == false)
+        try
         {
-            ViewBag.ErrorMessage = "Login failed: Wrong username or password";
+            // Get all users from UserService
+            var users = await _userApiService.GetAllUsersAsync();
+            
+            // Find user by email (assuming username is email)
+            var user = users.FirstOrDefault(u => u.Email.Equals(account.Username, StringComparison.OrdinalIgnoreCase));
+            
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "Login failed: User not found";
+                ViewBag.ReturnUrl = returnUrl;
+                return View();
+            }
+            
+            
+            // Create claims for the authenticated user
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.Name));
+            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            
+            if (user.IsAdmin)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+            }
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return Redirect(returnUrl);
+        }
+        catch (Exception ex)
+        {
+            ViewBag.ErrorMessage = $"Login failed: {ex.Message}";
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
-        // Korrekt användarnamn och lösenord, logga in användaren
-        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-        identity.AddClaim(new Claim(ClaimTypes.Name, account.Username));
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-
-        // Ifall vi inte har en returnUrl, gå till Home
-        if (string.IsNullOrEmpty(returnUrl))
-        {
-            return RedirectToAction("Index", "Home");
-        }
-
-        // Gå tillbaka via returnUrl
-        return Redirect(returnUrl);
     }
     
-    // Logga ut 
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

@@ -29,6 +29,20 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
     
 });
 /*--------------------------------------------------------------------------------*/
+
+
+builder.Services.AddHttpClient<UserApiService>((serviceProvider, httpClient) =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    string address = config.GetValue<string>("UserServiceAdress") ?? 
+                    config.GetValue<string>("UserService:BaseUrl") ?? "";
+
+    if (!string.IsNullOrEmpty(address))
+    {
+        httpClient.BaseAddress = new Uri(address);
+    }
+});
+
 builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

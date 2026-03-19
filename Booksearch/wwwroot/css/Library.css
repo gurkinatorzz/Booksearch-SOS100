@@ -126,3 +126,97 @@
 .showAllBooks button:hover {
     background-color: var(--color-theme2);
 }
+
+.bookRentalContainerTitle {
+    display: flex;
+    flex-wrap: wrap;
+    width: 60vw;
+    margin: 0 auto;
+    
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 5px;
+}
+.bookRentalContainerTitle > h1 {
+    width: 100%;
+    font-size: 3em;
+    text-decoration: underline 2px solid var(--color-theme2);
+    text-underline-offset: 5px;
+}
+
+.searchBar {
+    display: flex;
+/*    min-width: 500px;*/
+    justify-content: center;
+}
+.searchBar input[type="text"] {
+    all: unset;
+    border: 2px solid var(--color-theme2);
+    border-right: none;
+    border-radius: 0 0 0 10px;
+    text-align: left;
+    padding: 10px;
+    width: 300px;
+}
+.searchBar button {
+    background-color: var(--color-theme2);
+    border: none;
+    border-radius:0 15px 15px 0;
+    transition: transform 100ms ease;
+    
+    font-size: 1em
+}
+.searchBar button:hover {
+    color: white;
+}
+.searchBar button:active {
+    transform: scale(0.95);
+}
+.sortBy {
+    display: flex;
+    box-sizing: border-box;
+    /*width: max-content;*/
+}
+.sortBy select {
+/*    all: unset;*/
+    display: flex;
+    align-items: center;
+    color: grey;
+    border: 2px solid var(--color-theme2);
+    background-color: var(--color-bg);
+    border-radius: 15px 15px 15px 0;
+    border-bottom: none;
+    height: 100%;
+    text-align: center;
+    padding: 0 5px;
+}
+.sortBy option {
+    background-color: var(--color-bg);
+}
+.sortBy select:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: var(--color-theme2);
+}
+.searchBar, .sortBy {
+    display: none;
+}
+
+.rentButton {
+    all: unset;
+    width: 100px;
+    height: 20px;
+    
+    background-color: lightgreen;
+
+    border-radius: 5px;
+    border: 2px solid grey;
+    box-shadow: 2px 2px 5px var(--color-theme2);
+    
+    color: black;
+    text-align: center;
+    font-weight: 500;
+}
+.rentButton:hover {
+    background-color: var(--color-theme2);
+}
