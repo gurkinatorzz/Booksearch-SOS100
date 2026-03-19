@@ -40,9 +40,7 @@ public class AccountController : Controller
                 ViewBag.ReturnUrl = returnUrl;
                 return View();
             }
-
-            // TODO: You'll need to add a password verification endpoint to your UserService
-            // For now, this is still a limitation since UserService doesn't expose password verification
+            
             
             // Create claims for the authenticated user
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
