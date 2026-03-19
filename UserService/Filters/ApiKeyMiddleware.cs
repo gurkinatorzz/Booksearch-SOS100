@@ -20,13 +20,13 @@
                 await _next(context);
                 return;
             }
-        
-            // Get the expected API key from Azure Configuration
-            // Multiple fallback options for different configuration sources
-            var expectedApiKey = _configuration["UserApiKey"] ?? 
+
+            // ✅ FIXED: Get from Environment Variables first since that's how it's configured
+            var expectedApiKey = Environment.GetEnvironmentVariable("UserApiKey") ??           // ✅ Check env var first
+                               _configuration["UserApiKey"] ?? 
                                _configuration["UserService:ApiKey"] ?? 
                                Environment.GetEnvironmentVariable("USER_SERVICE_API_KEY") ?? "";
-            
+
             if (string.IsNullOrEmpty(expectedApiKey))
             {
                 context.Response.StatusCode = 500;

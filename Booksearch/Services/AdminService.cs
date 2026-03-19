@@ -13,25 +13,20 @@ namespace Booksearch.Services
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            
-            // Get API key from Azure App Service Configuration
-            // This will automatically use Azure configuration when deployed
-            _apiKey = _configuration["UserService:ApiKey"] ?? 
-                      _configuration["UserServiceApiKey"] ?? 
-                      Environment.GetEnvironmentVariable("USER_SERVICE_API_KEY") ?? "";
+            // ✅ Remove API key handling - it's now handled in Program.cs like BookLibraryService
         }
 
         private void SetApiKeyHeader()
         {
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("X-API-Key", _apiKey);
+            // ✅ Remove this method or make it empty - API key is now set in Program.cs
+            // The HttpClient already has the API key as default header
         }
 
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
             try
             {
-                SetApiKeyHeader();
+                
                 var response = await _httpClient.GetAsync("/api/users");
             
                 if (response.IsSuccessStatusCode)
@@ -58,7 +53,7 @@ namespace Booksearch.Services
         {
             try
             {
-                SetApiKeyHeader();
+                
                 var response = await _httpClient.GetAsync($"/api/users/{id}");
             
                 if (response.IsSuccessStatusCode)
@@ -89,7 +84,7 @@ namespace Booksearch.Services
         {
             try
             {
-                SetApiKeyHeader();
+                
                 var json = JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
             
@@ -113,7 +108,7 @@ namespace Booksearch.Services
         {
             try
             {
-                SetApiKeyHeader();
+                
                 var json = JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
             
@@ -137,7 +132,7 @@ namespace Booksearch.Services
         {
             try
             {
-                SetApiKeyHeader();
+                
                 var response = await _httpClient.DeleteAsync($"/api/users/{id}");
                 
                 if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.NotFound)
@@ -146,6 +141,30 @@ namespace Booksearch.Services
                     throw new Exception($"Delete user failed: {response.StatusCode} - {errorContent}");
                 }
                 
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Connection error: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> SetUserPasswordAsync(int userId, string password)
+        {
+            try
+            {
+                var requestData = new { Password = password };
+                var json = JsonSerializer.Serialize(requestData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"/api/password/{userId}/set", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Set password failed: {response.StatusCode} - {errorContent}");
+                }
+
                 return response.IsSuccessStatusCode;
             }
             catch (HttpRequestException ex)
