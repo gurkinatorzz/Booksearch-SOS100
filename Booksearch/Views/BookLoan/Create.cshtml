@@ -1,23 +1,41 @@
-﻿<h1>Låna bok</h1>
-<p>Bok: @ViewBag.BookTitle</p>
+﻿@{
+    ViewData["Title"] = "Låna bok";
+}
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/BookLoan.css"/>
+}
 
-
-
-<form asp-action="Create" method="post">
+<section class="loanContainer">
     
-    <input type="hidden" name="BookId" value="@ViewBag.BookId" />
-    <input type="hidden" name="BookTitle" value="@ViewBag.BookTitle" />
-    
-    <button type="submit">Låna bok</button>
-    
-    <label>Lånedatum:</label>
-    <input type="datetime-local" name="LoanDate" 
-           value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
-           readonly/>
+    <h1 class="loanTitle">Låna bok</h1>
 
-    <br />
+    <div class="formCard">
+        <p class="bookTitle"><strong>Bok:</strong> @ViewBag.BookTitle</p>
+        <p class="bookTitle">
+            <strong>Låntagare:</strong> @User.Identity?.Name
+        </p>
 
-    <label>Återlämningsdatum:</label>
-    <input type="datetime-local" name="DueDate" 
-           value="@DateTime.Now.AddDays(14).ToString("yyyy-MM-ddTHH:mm")" />
-</form>
+        <form asp-action="Create" method="post" class="loanForm">
+            
+            <input type="hidden" name="BookId" value="@ViewBag.BookId" />
+            <input type="hidden" name="BookTitle" value="@ViewBag.BookTitle" />
+
+            <div class="formGroup">
+                <label>Lånedatum</label>
+                <input type="datetime-local" name="LoanDate"
+                       value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                       readonly />
+            </div>
+
+            <div class="formGroup">
+                <label>Återlämningsdatum</label>
+                <input type="datetime-local" name="DueDate"
+                       value="@DateTime.Now.AddDays(14).ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+
+            <button type="submit" class="returnBtn">Låna bok</button>
+
+        </form>
+    </div>
+</section>

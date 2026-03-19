@@ -1,0 +1,150 @@
+﻿
+.loanContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.loanTitle {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.loanCard {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 350px;
+}
+
+.bookTitle {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.loanForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.formGroup input {
+    background-color: var(--color-bg);
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.loanBtn:hover {
+    background-color: #1a5edb;
+}
+.loanContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.loanTitle {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.loanCard {
+    background: var(--color-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 900px;
+}
+
+.loanTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.loanTable th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: none #eee;
+}
+
+.loanTable td {
+    padding: 10px;
+    border-bottom: none;
+    background-color: var(--color-bg);
+}
+
+
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.loanBtn {
+    padding: 10px 15px;
+    background: #2c7be5;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.loanBtn:hover {
+    background: #1a5edb;
+}
+
+.editBtn {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.returnBtn {
+    background: #e5533d;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.returnBtn:hover {
+    background: #c43c28;
+}
+
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+.formCard {
+    background: var(--color-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+    width: 100%;
+    max-width: 400px; /*  smal */
+}

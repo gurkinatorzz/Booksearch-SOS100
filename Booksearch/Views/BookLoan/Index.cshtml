@@ -1,57 +1,64 @@
 ﻿@model List<Booksearch.Models.BookLoan>
-@{
-    ViewData["Title"] = "Utlåning";
+
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/BookLoan.css"/>
 }
 
-<section class="pageHeader">
-    <h1>Utlåning</h1>
-    <p>Här hanterar du boklån: skapa lån, se aktiva lån och markera återlämning.</p>
+<section class="loanContainer">
 
-    <div class="pageActions">
-        <a class="btn" asp-controller="BookLoan" asp-action="Create">Låna en bok</a>
+    <div class="pageHeader">
+        <h1 class="loanTitle">Lånade böcker</h1>
+        <p class="subtitle">Här hanterar du dina befintliga boklån.</p>
+        
     </div>
-</section>
 
-<section class="contentSection">
-    <h2>Aktiva lån</h2>
+    <div class="loanCard">
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Bok</th>
-            <th>Låntagare</th>
-            <th>Lånedatum</th>
-            <th>Återlämnas</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var loan in Model)
+        <h2>Aktiva lån</h2>
+
+        <table class="loanTable">
+            <thead>
+            <tr>
+                <th>Bok</th>
+                <th>Låntagare</th>
+                <th>Lånedatum</th>
+                <th>Återlämnas</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var loan in Model)
+                {
+                    <tr>
+                        <td>@loan.BookTitle</td>
+                        <td>@loan.BorrowerName</td>
+                        <td>@loan.LoanDate.ToString("yyyy-MM-dd")</td>
+                        <td>@loan.DueDate.ToString("yyyy-MM-dd")</td>
+                        <td class="actions">
+
+                            <a class="editBtn" asp-action="Edit" asp-route-id="@loan.Id">Ändra</a>
+
+                            <form asp-action="Return" method="post">
+                                <input type="hidden" name="id" value="@loan.Id"/>
+                                <button type="submit" class="returnBtn">Återlämna</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@loan.BookTitle</td>
-                    <td>@loan.BorrowerName</td>
-                    <td>@loan.LoanDate</td>
-                    <td>@loan.DueDate</td>
-                    <td>
-                        
-                        <a asp-action="Edit" asp-route-id="@loan.Id">Ändra</a>
-                        <form asp-action="Return" method="post">
-                            <input type="hidden" name="id" value="@loan.Id"/>
-                            <button type="submit">Återlämna</button>
-                        </form>
-                    </td>
+                    <td colspan="5" class="empty">Inga aktiva lån ännu.</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="5">Inga aktiva lån ännu.</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+
+    </div>
 </section>

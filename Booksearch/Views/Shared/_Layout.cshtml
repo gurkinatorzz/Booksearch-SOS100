@@ -40,7 +40,7 @@
                 <a asp-controller="Rooms" asp-action="MinaBokningar" class="dropdownItem">Mina bokningar</a>
                 
                 @* WILLIAM: Ersätt href="#" med rätt länk *@
-                <a href="#" class="dropdownItem">Mina lån</a>
+                <a asp-controller="BookLoan" asp-action="Index" class="dropdownItem">Mina Lån</a>
                 <hr class="dropdownDivider" />
                 
                 @* AXEL: Ersätt href="#" med rätt logout-länk *@
@@ -70,7 +70,7 @@
                         <a asp-area="" asp-controller="Rooms" asp-action="BokaGrupprum">Bokning</a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="BookLoan" asp-action="Index">Låna Bok</a> @*lägg in korrekt länk*@
+                        <a asp-area="" asp-controller="BookLoan" asp-action="Index">Mina Lån</a> @*lägg in korrekt länk*@
                     </li>
                     <li>
                         <a asp-controller="Reservation" asp-action="Queue" asp-route-bookId="1">

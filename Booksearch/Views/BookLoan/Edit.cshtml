@@ -1,27 +1,43 @@
 ﻿@model Booksearch.Models.BookLoan
 
-<h1>Ändra lån</h1>
+@section Styles 
+{
+    <link rel="stylesheet" href="~/css/BookLoan.css"/>
+}
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" name="Id" value="@Model.Id" />
-    <input type="hidden" name="BookId" value="@Model.BookId" />
-    <input type="hidden" name="BookTitle" value="@Model.BookTitle" />
-    <input type="hidden" name="BorrowerName" value="@Model.BorrowerName" />
+<section class="loanContainer">
 
-    <p>Bok: @Model.BookTitle</p>
-    <p>Låntagare: @Model.BorrowerName</p>
+    <h1 class="loanTitle">Ändra datum på återlämning</h1>
 
-    <label>Lånedatum:</label>
-    <input type="datetime-local" value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")" readonly />
-    <input type="hidden" name="LoanDate" value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")" />
-    
+    <div class="formCard">
 
-    <br />
+        <p class="bookTitle"><strong>Bok:</strong> @Model.BookTitle</p>
+        <p class="bookTitle"><strong>Låntagare:</strong> @Model.BorrowerName</p>
 
-    <label>Återlämningsdatum:</label>
-    <input type="datetime-local" name="DueDate" value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
+        <form asp-action="Edit" method="post" class="loanForm">
 
-    <br />
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="BookId" value="@Model.BookId" />
+            <input type="hidden" name="BookTitle" value="@Model.BookTitle" />
+            <input type="hidden" name="BorrowerName" value="@Model.BorrowerName" />
+            <input type="hidden" name="LoanDate" value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")" />
 
-    <button type="submit">Spara ändringar</button>
-</form>
+            <div class="formGroup">
+                <label>Lånedatum</label>
+                <input type="datetime-local"
+                       value="@Model.LoanDate.ToString("yyyy-MM-ddTHH:mm")"
+                       readonly />
+            </div>
+
+            <div class="formGroup">
+                <label>Återlämningsdatum</label>
+                <input type="datetime-local"
+                       name="DueDate"
+                       value="@Model.DueDate.ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+
+            <button type="submit" class="returnBtn">Uppdatera Återlämningsdatum</button>
+
+        </form>
+    </div>
+</section>
