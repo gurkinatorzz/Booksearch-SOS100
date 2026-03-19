@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserService.Data;
+using UserService.Models;
+using UserService.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,7 @@ builder.Services.AddDbContext<UserDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("Connection"));
 });
+builder.Services.AddScoped<PasswordHasher<User>>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -28,6 +32,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+
+// Add API Key middleware
+app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseAuthorization();
 

@@ -1,0 +1,167 @@
+﻿@model Booksearch.ViewModels.UserAdmin
+
+<h2>User Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ApiError))
+{
+    <div class="alert alert-danger">@Model.ApiError</div>
+}
+
+<div class="row">
+    <!-- User List -->
+    <div class="col-md-8">
+        <h3>Users</h3>
+        
+        @if (Model.Users.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.Name</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.IsAdmin)
+                                    {
+                                        <span class="badge bg-warning">Admin</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">User</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Edit</a>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            onclick="confirmDelete(@user.Id, '@user.Name')">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No users found.</p>
+        }
+    </div>
+
+    <!-- Create/Edit User Form -->
+    <div class="col-md-4">
+        @if (Model.IsEditing && Model.EditingUser != null)
+        {
+            <h3>Edit User</h3>
+            <form asp-action="UpdateUser" method="post">
+                <input type="hidden" asp-for="EditingUser.Id" />
+                
+                <div class="mb-3">
+                    <label asp-for="EditingUser.Name" class="form-label">Name</label>
+                    <input asp-for="EditingUser.Name" class="form-control" required />
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="EditingUser.Email" class="form-label">Email</label>
+                    <input asp-for="EditingUser.Email" type="email" class="form-control" required />
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input asp-for="EditingUser.IsAdmin" type="checkbox" class="form-check-input" />
+                    <label asp-for="EditingUser.IsAdmin" class="form-check-label">Is Admin</label>
+                </div>
+                
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Update User</button>
+                    <a asp-action="UserAdmin" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <h3>Create New User</h3>
+            <form asp-action="CreateUser" method="post">
+                <div class="mb-3">
+                    <label asp-for="Form.Name" class="form-label">Name</label>
+                    <input asp-for="Form.Name" class="form-control" required />
+                    <span asp-validation-for="Form.Name" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Form.Email" class="form-label">Email</label>
+                    <input asp-for="Form.Email" type="email" class="form-control" required />
+                    <span asp-validation-for="Form.Email" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input asp-for="Form.IsAdmin" type="checkbox" class="form-check-input" />
+                    <label asp-for="Form.IsAdmin" class="form-check-label">Is Admin</label>
+                </div>
+                
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">Create User</button>
+                </div>
+                
+                <small class="text-muted">
+                    Note: Password can be set later using the Password API if needed.
+                </small>
+            </form>
+        }
+    </div>
+</div>
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete user <strong id="userName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-action="DeleteUser" method="post" style="display: inline;">
+                    <input type="hidden" id="deleteUserId" name="id" value="" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(userId, userName) {
+    document.getElementById('deleteUserId').value = userId;
+    document.getElementById('userName').textContent = userName;
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+</script>
