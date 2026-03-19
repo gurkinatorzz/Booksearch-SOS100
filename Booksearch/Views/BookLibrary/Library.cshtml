@@ -8,15 +8,40 @@
     <link rel="stylesheet" href="~/css/Library.css"/>
 }
 
-<h1 class="bookRentalContainerTitle">Utforska böcker</h1>
+<div class="bookRentalContainerTitle">
+    
+    <h1>Utforska böcker</h1>
+<div sortAndSearchWrapper>
+
+    <div class="sortBy">
+        <select id="sortSelect">
+            <option value="" disabled selected hidden>Sortera här</option>
+            <option value="latest">Senast tillagda</option>
+            <option value="id">Tidigast tillagda</option>
+            <option value="title">Namn stigande (A-Ö)</option>
+            <option value="titleReversed">Namn fallande (Ö-A)</option>
+            <option value="author">Författare</option>
+            <option value="category">Kategori</option>
+            <option value="year">Utgivningsår (nyast först)</option>
+            <option value="yearReversed">Utgivningsår (äldst först)</option>
+        </select>
+    </div>
+    <div class="searchBar">
+        <input id="searchInput" type="text" placeholder="Sök på bok, titel, år eller kategori"/>
+        <button id="clearSearchBtn" type="button">Rensa</button>
+    </div>
+
+</div>
+</div>
+
 <div class="bookRentalContainer" id="bookContainer">
     
     @* Mata in från API *@
     @if (Model != null && Model.Any())
     {
-        foreach (var Book in Model.OrderBy(b => b.Title)) /* Sorterar efter titelnamn */
+        foreach (var Book in Model.OrderByDescending(b => b.Id))
         {
-            <div class="book">
+            <div class="book" data-id="@Book.Id">
                 <img class="bookCover" src="" alt="Book image"/>
                 <h2>@Book.Title</h2>
                 <p>@Book.Author</p>
@@ -33,7 +58,7 @@
                    asp-action="Create"
                    asp-route-bookId="@Book.Id"
                    asp-route-bookTitle="@Book.Title">
-                    <button>Hyr bok</button>
+                    <button class="rentButton">Hyr bok</button>
                 </a>
                 </div>
         }
