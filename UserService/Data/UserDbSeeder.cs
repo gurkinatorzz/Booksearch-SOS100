@@ -3,7 +3,7 @@ using UserService.Models;
 
 namespace UserService.Data;
 
-public static class UserDbSeeder
+/*public static class UserDbSeeder
 {
     public static void Seed(UserDbContext context, PasswordHasher<User> passwordHasher)
     {
@@ -74,4 +74,4 @@ public static class UserDbSeeder
         context.Users.AddRange(users);
         context.SaveChanges();
     }
-}
+} */

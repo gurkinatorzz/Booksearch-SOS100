@@ -34,13 +34,14 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
 builder.Services.AddHttpClient<UserApiService>((serviceProvider, httpClient) =>
 {
     var config = serviceProvider.GetRequiredService<IConfiguration>();
-    string address = config.GetValue<string>("UserServiceAdress") ?? 
-                    config.GetValue<string>("UserService:BaseUrl") ?? "";
-
-    if (!string.IsNullOrEmpty(address))
-    {
-        httpClient.BaseAddress = new Uri(address);
-    }
+    string address = config.GetValue<string>("UserServiceAdress") ?? "";
+    
+    httpClient.BaseAddress = new Uri(address);
+    var apiKey = Environment.GetEnvironmentVariable("UserApiKey") ?? 
+                 config["UserService:ApiKey"] ?? 
+                 "5D18E959792E4B7A880A2B521B752CED"; // fallback to your known key
+    
+    httpClient.DefaultRequestHeaders.Add("X-API-Key", apiKey);
 });
 
 builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
