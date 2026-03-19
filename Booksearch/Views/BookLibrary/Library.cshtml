@@ -24,11 +24,17 @@
                 <p>@Book.Year</p>
                 
                 @* klicka på hyr för att skicka bokens ID till hyr-api: *@
-                <form asp-action="Rent" asp-controller="BookLibrary" method="post">
+                @*<form asp-action="Rent" asp-controller="BookLibrary" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="bookId" value="@Book.Id" />
                     <button type="submit">Hyr bok</button>
-                </form>
+                </form>*@
+                <a asp-controller="BookLoan"
+                   asp-action="Create"
+                   asp-route-bookId="@Book.Id"
+                   asp-route-bookTitle="@Book.Title">
+                    <button>Hyr bok</button>
+                </a>
                 </div>
         }
     }

@@ -13,5 +13,7 @@ namespace UserService.Models
         [EmailAddress]
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
+
+        public string? PasswordHash { get; set; }
     }
 }
