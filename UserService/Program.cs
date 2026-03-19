@@ -18,13 +18,19 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Apply pending migrations at startup
+// Apply pending migrations and seed database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var dbContext = services.GetRequiredService<UserDbContext>();
+    var passwordHasher = services.GetRequiredService<PasswordHasher<User>>();
+    
     dbContext.Database.Migrate();
+    
+    // Seed the database with sample users
+    UserDbSeeder.Seed(dbContext, passwordHasher);
 }
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 {
