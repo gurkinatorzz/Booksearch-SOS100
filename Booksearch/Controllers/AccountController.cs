@@ -17,7 +17,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginVM account, string returnUrl)
     {
-        // Hardcoded login credentials
+        /* Hardcoded login credentials
         bool accountValid = account.Username == "admin" && account.Password == "abc123";
 
         // Check login credentials
@@ -26,7 +26,7 @@ public class AccountController : Controller
             ViewBag.ErrorMessage = "Login failed: Wrong username or password";
             ViewBag.ReturnUrl = returnUrl;
             return View();
-        }
+        } */
 
         // Create claims for the authenticated user
         var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
