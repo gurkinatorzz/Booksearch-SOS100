@@ -10,6 +10,8 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.AddService<RoomService.Filters.ApiKeyFilter>();
 });
+
+builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
