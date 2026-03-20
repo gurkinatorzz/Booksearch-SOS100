@@ -178,4 +178,58 @@ public class BookLibraryService
         if (!response.IsSuccessStatusCode) throw new Exception
                 ($"API call failed\nURL: {fullUrl}\nStatus: {(int)response.StatusCode} {response.ReasonPhrase}\nBody:\n{body}");
     }
+    
+    /* ta bort författare */
+    public async Task DeleteAuthor(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"Author/{id}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var message = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Kunde inte ta bort författare. {message}");
+        }
+    }
+
+    /* ta bort kategori */
+    public async Task DeleteCategory(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"Category/{id}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var message = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Kunde inte ta bort kategori. {message}");
+        }
+    }
+    
+    /* ändra författare */
+    public async Task UpdateAuthor(int id, AuthorUpdateDto dto)
+    {
+        var fullUrl = new Uri(_httpClient.BaseAddress!, $"author/{id}");
+        var response = await _httpClient.PutAsJsonAsync($"author/{id}", dto);
+        var body = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(
+                $"API call failed\nURL: {fullUrl}\nStatus: {(int)response.StatusCode} {response.ReasonPhrase}\nBody:\n{body}"
+            );
+        }
+    }
+
+    /* ändra kategori */
+    public async Task UpdateCategory(int id, CategoryUpdateDto dto)
+    {
+        var fullUrl = new Uri(_httpClient.BaseAddress!, $"category/{id}");
+        var response = await _httpClient.PutAsJsonAsync($"category/{id}", dto);
+        var body = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(
+                $"API call failed\nURL: {fullUrl}\nStatus: {(int)response.StatusCode} {response.ReasonPhrase}\nBody:\n{body}"
+            );
+        }
+    }
 }
