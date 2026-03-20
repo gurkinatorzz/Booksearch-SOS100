@@ -1,6 +1,6 @@
 @model Booksearch.ViewModels.LibraryAdmin
 
-<h1>Library Admin (sidan ska vara låst till admin senare!!)</h1>
+<h1 style="text-decoration: underline 2px solid var(--color-theme2); text-underline-offset: 3px; ">Hantera böcker, författare och kategorier</h1>
 
 @if (!string.IsNullOrWhiteSpace(Model.ApiError))
 {
@@ -95,7 +95,7 @@ else
                     <td style="border-bottom:1px solid #eee; padding:8px;">@b.Author</td> /*stod AuthorName innan*/
                     <td style="border-bottom:1px solid #eee; padding:8px;">@b.Category</td> /*stod CateGoryName innan*/
                     <td style="border-bottom:1px solid #eee; padding:8px;">
-                        <a asp-action="LibraryAdmin" asp-route-editId="@b.Id" style="margin-right:10px;">Edit</a>
+                        <a asp-action="LibraryAdmin" asp-route-editId="@b.Id" asp-fragment="books" style="margin-right:10px;">Ändra</a>
 
                         <form asp-action="DeleteBookFromAdmin" method="post" style="display:inline;">
                             @Html.AntiForgeryToken()
@@ -153,6 +153,133 @@ else
                             </div>
 
                             <div style="margin-top:10px;">
+                                <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
+                                <a asp-action="LibraryAdmin">Avbryt</a>
+                            </div>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<hr />
+<h2>Författare</h2>
+
+@if (Model.Authors == null || !Model.Authors.Any())
+{
+    <p>Inga författare hittades.</p>
+}
+else
+{
+    <table style="border-collapse:collapse; width:100%; max-width:800px; margin-bottom:24px;">
+        <thead>
+        <tr>
+            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
+            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var a in Model.Authors)
+        {
+            var isEditingAuthor = Model.AuthorForm?.Id == a.Id;
+
+            <tr>
+                @if (!isEditingAuthor)
+                {
+                    <td style="border-bottom:1px solid #eee; padding:8px;">@a.Name</td>
+                    <td style="border-bottom:1px solid #eee; padding:8px;">
+                        <a asp-action="LibraryAdmin" asp-route-editAuthorId="@a.Id" asp-fragment="authors" style="margin-right:10px;">Ändra</a>
+
+                        <form asp-action="DeleteAuthorFromAdmin" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@a.Id" />
+                            <button type="submit"
+                                    onclick="return confirm('Ta bort författaren: @a.Name ?');"
+                                    style="padding:6px 10px;">
+                                Ta bort
+                            </button>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
+                        <form asp-action="EditAuthor" method="post" style="display:flex; gap:10px; align-items:end;">
+                            @Html.AntiForgeryToken()
+                            <input asp-for="AuthorForm.Id" type="hidden" />
+
+                            <div style="flex:1;">
+                                <label style="display:block;">Namn</label>
+                                <input asp-for="AuthorForm.Name" style="width:100%; padding:6px;" />
+                            </div>
+
+                            <div>
+                                <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
+                                <a asp-action="LibraryAdmin">Avbryt</a>
+                            </div>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+<hr />
+<h2>Kategorier</h2>
+
+@if (Model.Categories == null || !Model.Categories.Any())
+{
+    <p>Inga kategorier hittades.</p>
+}
+else
+{
+    <table style="border-collapse:collapse; width:100%; max-width:800px;">
+        <thead>
+        <tr>
+            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
+            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var c in Model.Categories)
+        {
+            var isEditingCategory = Model.CategoryForm?.Id == c.Id;
+
+            <tr>
+                @if (!isEditingCategory)
+                {
+                    <td style="border-bottom:1px solid #eee; padding:8px;">@c.Name</td>
+                    <td style="border-bottom:1px solid #eee; padding:8px;">
+                        <a asp-action="LibraryAdmin" asp-route-editCategoryId="@c.Id" asp-fragment="categories" style="margin-right:10px;">Ändra</a>
+
+                        <form asp-action="DeleteCategoryFromAdmin" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <button type="submit"
+                                    onclick="return confirm('Ta bort kategorin: @c.Name ?');"
+                                    style="padding:6px 10px;">
+                                Ta bort
+                            </button>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
+                        <form asp-action="EditCategory" method="post" style="display:flex; gap:10px; align-items:end;">
+                            @Html.AntiForgeryToken()
+                            <input asp-for="CategoryForm.Id" type="hidden" />
+
+                            <div style="flex:1;">
+                                <label style="display:block;">Namn</label>
+                                <input asp-for="CategoryForm.Name" style="width:100%; padding:6px;" />
+                            </div>
+
+                            <div>
                                 <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
                                 <a asp-action="LibraryAdmin">Avbryt</a>
                             </div>

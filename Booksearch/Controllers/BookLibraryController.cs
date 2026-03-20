@@ -1,3 +1,4 @@
+using System.Runtime.Intrinsics.X86;
 using Microsoft.AspNetCore.Mvc;
 using Booksearch.Models.BookLibraryDtos;
 using Booksearch.Services;
@@ -32,29 +33,51 @@ public class BookLibraryController : Controller
 
     }
     [Authorize]
-    //Hämtar in böcker, författare och kategorier
     [HttpGet]
-    public async Task<IActionResult> LibraryAdmin(int? editId)
+    public async Task<IActionResult> LibraryAdmin(int? editId, int? editAuthorId, int? editCategoryId)
     {
         var vm = new Booksearch.ViewModels.LibraryAdmin();
 
         try
         {
             vm.Books = await _bookLibraryService.GetBooksWithDetail();
-            vm.Form.Authors = await _bookLibraryService.GetAuthors();
-            vm.Form.Categories = await _bookLibraryService.GetCategories();
+            vm.Authors = await _bookLibraryService.GetAuthors();
+            vm.Categories = await _bookLibraryService.GetCategories();
+
+            vm.Form.Authors = vm.Authors;
+            vm.Form.Categories = vm.Categories;
 
             if (editId.HasValue)
             {
                 var book = await _bookLibraryService.GetBookById(editId.Value);
-                
+
                 vm.Form.Id = book.Id;
                 vm.Form.Title = book.Title;
                 vm.Form.Year = book.Year;
                 vm.Form.AuthorId = book.AuthorId;
                 vm.Form.CategoryId = book.CategoryId;
             }
-            
+
+            if (editAuthorId.HasValue)
+            {
+                var author = vm.Authors.FirstOrDefault(a => a.Id == editAuthorId.Value);
+                if (author != null)
+                {
+                    vm.AuthorForm.Id = author.Id;
+                    vm.AuthorForm.Name = author.Name;
+                }
+            }
+
+            if (editCategoryId.HasValue)
+            {
+                var category = vm.Categories.FirstOrDefault(c => c.Id == editCategoryId.Value);
+                if (category != null)
+                {
+                    vm.CategoryForm.Id = category.Id;
+                    vm.CategoryForm.Name = category.Name;
+                }
+            }
+
             return View("LibraryAdmin", vm);
         }
         catch (Exception ex)
@@ -225,6 +248,147 @@ public class BookLibraryController : Controller
         {
             TempData["Msg"] = "Fel: " + ex.Message;
             return RedirectToAction(nameof(Index));
+        }
+    }
+    
+    /* ta bort författare */
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAuthorFromAdmin(int id)
+    {
+        try
+        {
+            await _bookLibraryService.DeleteAuthor(id);
+            return RedirectToAction(nameof(LibraryAdmin));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+    
+    /* Ta bort kategori */
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteCategoryFromAdmin(int id)
+    {
+        try
+        {
+            await _bookLibraryService.DeleteCategory(id);
+            return RedirectToAction(nameof(LibraryAdmin));
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> EditAuthor(int id)
+    {
+        try
+        {
+            var authors = await _bookLibraryService.GetAuthors();
+            var author = authors.FirstOrDefault(a => a.Id == id);
+
+            if (author == null)
+                return NotFound();
+
+            var vm = new AuthorUpdateDto
+            {
+                Id = author.Id,
+                Name = author.Name
+            };
+
+            return View(vm);
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditAuthor([Bind(Prefix = "AuthorForm")] AuthorUpdateDto vm)
+    {
+        try
+        {
+            await _bookLibraryService.UpdateAuthor(vm.Id, vm);
+            return RedirectToAction(nameof(LibraryAdmin));
+        }
+        catch (Exception ex)
+        {
+            var pageVm = new LibraryAdmin
+            {
+                Books = await _bookLibraryService.GetBooksWithDetail(),
+                Authors = await _bookLibraryService.GetAuthors(),
+                Categories = await _bookLibraryService.GetCategories(),
+                AuthorForm = vm,
+                ApiError = ex.Message
+            };
+
+            pageVm.Form.Authors = pageVm.Authors;
+            pageVm.Form.Categories = pageVm.Categories;
+
+            return View("LibraryAdmin", pageVm);
+        }
+    }
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> EditCategory(int id)
+    {
+        try
+        {
+            var categories = await _bookLibraryService.GetCategories();
+            var category = categories.FirstOrDefault(c => c.Id == id);
+
+            if (category == null)
+                return NotFound();
+
+            var vm = new CategoryUpdateDto
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
+
+            return View(vm);
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message);
+        }
+    }
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditCategory([Bind(Prefix = "CategoryForm")] CategoryUpdateDto vm)
+    {
+        try
+        {
+            await _bookLibraryService.UpdateCategory(vm.Id, vm);
+            return RedirectToAction(nameof(LibraryAdmin));
+        }
+        catch (Exception ex)
+        {
+            var pageVm = new LibraryAdmin
+            {
+                Books = await _bookLibraryService.GetBooksWithDetail(),
+                Authors = await _bookLibraryService.GetAuthors(),
+                Categories = await _bookLibraryService.GetCategories(),
+                CategoryForm = vm,
+                ApiError = ex.Message
+            };
+
+            pageVm.Form.Authors = pageVm.Authors;
+            pageVm.Form.Categories = pageVm.Categories;
+
+            return View("LibraryAdmin", pageVm);
         }
     }
 }
