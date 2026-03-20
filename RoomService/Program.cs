@@ -30,7 +30,7 @@ app.MapScalarApiReference();
 
 if (app.Environment.IsDevelopment())
 {
-    // lämna tomt eller ta bort if-blocket helt
+    
 }
 
 

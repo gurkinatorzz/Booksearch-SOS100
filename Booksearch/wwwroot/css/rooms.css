@@ -483,3 +483,18 @@
     background: #f9ebe7;
     color: #6B2A1A;
 }
+
+/* ===== ALLA BOKNINGAR ===== */
+.btn-omboka {
+    padding: 5px 12px;
+    background: #E6F1FB;
+    color: #0C447C;
+    border: 1px solid #B5D4F4;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    font-family: var(--font-sans);
+}
+
+.btn-omboka:hover { opacity: 0.8; }

@@ -162,4 +162,65 @@ public class RoomsController : Controller
     {
         return View();
     }
+    
+    // GET - alla bokningar (admin och medarbetare)
+    [Authorize]
+    public async Task<IActionResult> AllaBokningar()
+    {
+        var bookings = new List<RoomBookingListVM>();
+        var rooms = new List<RoomOption>();
+
+        try
+        {
+            var response = await _httpClient.GetAsync("api/roombookings");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                bookings = JsonSerializer.Deserialize<List<RoomBookingListVM>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            }
+
+            var roomsResponse = await _httpClient.GetAsync("api/rooms");
+            if (roomsResponse.IsSuccessStatusCode)
+            {
+                var json = await roomsResponse.Content.ReadAsStringAsync();
+                rooms = JsonSerializer.Deserialize<List<RoomOption>>(json,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+            }
+
+            foreach (var b in bookings)
+            {
+                var room = rooms.FirstOrDefault(r => r.Id == b.RoomId);
+                if (room != null) b.RoomName = room.Name;
+            }
+        }
+        catch { }
+
+        return View(bookings);
+    }
+
+// POST - omboka
+    [HttpPost]
+    public async Task<IActionResult> OmbokaGrupprum(int id, string bookedBy, DateTime newDate, string newTimeSlot)
+    {
+        var start = newDate.Date + TimeSpan.Parse(newTimeSlot);
+        var end = start.AddHours(2);
+
+        var updated = new
+        {
+            Id = id,
+            RoomId = 0,
+            BookedBy = bookedBy,
+            StartTime = start,
+            EndTime = end,
+            Purpose = "",
+            Status = "Aktiv"
+        };
+
+        var json = JsonSerializer.Serialize(updated);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        await _httpClient.PutAsync($"api/roombookings/{id}", content);
+
+        return RedirectToAction("AllaBokningar");
+    }
 }

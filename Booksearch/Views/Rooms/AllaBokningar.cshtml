@@ -1,0 +1,145 @@
+﻿@model List<Booksearch.ViewModels.RoomBookingListVM>
+@{
+    ViewData["Title"] = "Alla bokningar";
+    var aktiva = Model.Where(b => !b.IsHistory).OrderByDescending(b => b.StartTime).ToList();
+    var historik = Model.Where(b => b.IsHistory).OrderByDescending(b => b.StartTime).ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/rooms.css" />
+}
+
+<div class="bookingSection">
+  <div class="bookingFormBox" style="max-width:600px; padding:0.75rem 1rem;">
+
+    <h1 style="font-size:1.2rem; margin-bottom:2px;">Alla bokningar</h1>
+    <p class="pageSubText" style="margin-bottom:0.5rem;">Visa och hantera alla bokningar</p>
+
+    <!-- STATISTIK -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:0.75rem;">
+      <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:0.4rem 0.5rem;">
+        <div style="font-size:11px; color:var(--color-text-secondary); margin-bottom:2px;">Totalt</div>
+        <div style="font-size:18px; font-weight:500;">@Model.Count</div>
+      </div>
+      <div style="background:#EAF3DE; border-radius:var(--border-radius-md); padding:0.4rem 0.5rem;">
+        <div style="font-size:11px; color:#3B6D11; margin-bottom:2px;">Aktiva</div>
+        <div style="font-size:18px; font-weight:500; color:#3B6D11;">@aktiva.Count</div>
+      </div>
+      <div style="background:#FCEBEB; border-radius:var(--border-radius-md); padding:0.4rem 0.5rem;">
+        <div style="font-size:11px; color:#A32D2D; margin-bottom:2px;">Avbokade/Avslutade</div>
+        <div style="font-size:18px; font-weight:500; color:#A32D2D;">@historik.Count</div>
+      </div>
+    </div>
+
+    <!-- AKTIVA BOKNINGAR -->
+    <p class="secLabel" style="margin-bottom:4px;">Aktiva bokningar</p>
+    @if (!aktiva.Any())
+    {
+      <div class="emptyMsg"><p>Inga aktiva bokningar.</p></div>
+    }
+    else
+    {
+      <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:0.75rem; @(aktiva.Count > 5 ? "max-height:350px; overflow-y:auto;" : "")">
+        @foreach (var booking in aktiva)
+        {
+          <div class="bookingCard" style="padding:0.4rem 0.75rem;">
+            <div class="bookingCardInfo">
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                <div class="bookingCardRoom" style="font-size:0.82rem;">@booking.RoomName</div>
+                <span style="font-size:11px; padding:1px 7px; border-radius:20px; background:var(--color-background-secondary); color:var(--color-text-secondary); border:0.5px solid var(--color-border-tertiary);">@booking.BookedBy</span>
+              </div>
+              <div class="bookingCardTime" style="font-size:0.75rem;">
+                @booking.StartTime.ToString("dd/MM/yyyy HH:mm") –
+                @booking.EndTime.ToString("HH:mm")
+              </div>
+              @if (!string.IsNullOrEmpty(booking.Purpose))
+              {
+                <div class="bookingCardPurpose" style="font-size:0.75rem;">@booking.Purpose</div>
+              }
+            </div>
+            <div style="display:flex; gap:5px;">
+              <button class="btn-omboka" onclick="visaOmbokaForm(@booking.Id, '@booking.BookedBy', '@booking.StartTime.ToString("yyyy-MM-dd")', '@booking.StartTime.ToString("HH:mm")')">
+                Omboka
+              </button>
+              <form asp-action="AvbokaGrupprum" method="post" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@booking.Id" />
+                <button type="submit" class="avbokaBtn">Avboka</button>
+              </form>
+            </div>
+          </div>
+
+          <div id="ombokaForm-@booking.Id" style="display:none; background:#E6F1FB; border:0.5px solid #B5D4F4; border-radius:var(--border-radius-lg); padding:0.75rem; margin-top:-2px;">
+            <p style="font-size:12px; font-weight:500; color:#0C447C; margin-bottom:6px;">Välj nytt datum och tid för @booking.BookedBy</p>
+            <form asp-action="OmbokaGrupprum" method="post">
+              @Html.AntiForgeryToken()
+              <input type="hidden" name="id" value="@booking.Id" />
+              <input type="hidden" name="bookedBy" value="@booking.BookedBy" />
+              <div style="display:flex; gap:6px; align-items:center;">
+                <input type="date" name="newDate" id="newDate-@booking.Id" class="dateInput" style="margin-bottom:0;" />
+                <select name="newTimeSlot" class="dateInput" style="margin-bottom:0;">
+                  <option value="10:00">10:00–12:00</option>
+                  <option value="12:00">12:00–14:00</option>
+                  <option value="14:00">14:00–16:00</option>
+                </select>
+                <button type="submit" class="btn-omboka">Bekräfta</button>
+                <button type="button" onclick="doljaOmbokaForm(@booking.Id)" class="avbokaBtn">Avbryt</button>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    }
+
+    <hr class="divider" style="margin:0.4rem 0;" />
+
+    <!-- HISTORIK -->
+    <p class="secLabel" style="margin-bottom:4px;">Historik</p>
+    @if (!historik.Any())
+    {
+      <div class="emptyMsg"><p>Ingen bokningshistorik.</p></div>
+    }
+    else
+    {
+      <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:0.75rem; @(historik.Count > 5 ? "max-height:350px; overflow-y:auto;" : "")">
+        @foreach (var booking in historik)
+        {
+          <div class="bookingCard bookingCardHistory" style="padding:0.4rem 0.75rem;">
+            <div class="bookingCardInfo">
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                <div class="bookingCardRoom" style="font-size:0.82rem;">@booking.RoomName</div>
+                <span style="font-size:11px; padding:1px 7px; border-radius:20px; background:var(--color-background-secondary); color:var(--color-text-secondary); border:0.5px solid var(--color-border-tertiary);">@booking.BookedBy</span>
+              </div>
+              <div class="bookingCardTime" style="font-size:0.75rem;">
+                @booking.StartTime.ToString("dd/MM/yyyy HH:mm") –
+                @booking.EndTime.ToString("HH:mm")
+              </div>
+              @if (!string.IsNullOrEmpty(booking.Purpose))
+              {
+                <div class="bookingCardPurpose" style="font-size:0.75rem;">@booking.Purpose</div>
+              }
+            </div>
+            <span class="historyBadge">@(booking.Status == "Avbokad" ? "Avbokad" : "Avslutad")</span>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  function visaOmbokaForm(id, bookedBy, date, time) {
+    document.querySelectorAll('[id^="ombokaForm-"]').forEach(f => f.style.display = 'none');
+    const form = document.getElementById('ombokaForm-' + id);
+    if (form) {
+      form.style.display = 'block';
+      document.getElementById('newDate-' + id).value = date;
+    }
+  }
+  function doljaOmbokaForm(id) {
+    document.getElementById('ombokaForm-' + id).style.display = 'none';
+  }
+</script>
+}
