@@ -201,11 +201,15 @@ footer p a:hover {
   color: var(--color-theme2);
   cursor: pointer;
 }
+#fastLinks:hover {
+  color: lightgrey;
+}
 #loggaInP {
   color: var(--color-theme2);
   text-transform: uppercase;
   text-decoration: none;
   margin-top: 30px;
+  width: fit-content;
 }
 #loggaInP:hover {
   color: grey;
@@ -322,6 +326,15 @@ a:hover, button:hover {
   width: 24px;
   height: 24px;
   fill: currentColor;
+  transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+  transition: fill 0.2s ease;
+}
+.profileBtn svg:hover {
+  fill: lightgrey;
+  transform: scale(1.1);
+}
+.profileBtn svg:active {
+  fill: white;
 }
 
 .profileDropdown {
@@ -383,4 +396,14 @@ a:hover, button:hover {
 .dropdownLogout:hover {
   background: #f9ebe7;
   color: #6B2A1A;
+}
+
+.loggedInAs {
+  position: absolute;
+  justify-self: flex-end;
+  left: 10px;
+}
+.loggedInAs strong {
+  color: var(--color-bg);
+  font-weight: 500;
 }

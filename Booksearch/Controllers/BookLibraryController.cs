@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Booksearch.Models.BookLibraryDtos;
 using Booksearch.Services;
 using Booksearch.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Booksearch.Controllers;
 
@@ -30,7 +31,7 @@ public class BookLibraryController : Controller
         }
 
     }
-
+    [Authorize]
     //Hämtar in böcker, författare och kategorier
     [HttpGet]
     public async Task<IActionResult> LibraryAdmin(int? editId)
@@ -65,6 +66,7 @@ public class BookLibraryController : Controller
 
     //Skapa bok
     [HttpPost]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateFromAdmin([Bind(Prefix = "Form")] Booksearch.ViewModels.BookFormVM vm) //chatGPT hjälp efter felsökning
     {
@@ -126,6 +128,7 @@ public class BookLibraryController : Controller
     
     //Ta bort bok
     [HttpPost]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteBookFromAdmin(int id)
     {
@@ -142,6 +145,7 @@ public class BookLibraryController : Controller
     
     //Redigera
     [HttpPost]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit([Bind(Prefix="Form")] BookFormVM vm)
     {
@@ -201,6 +205,7 @@ public class BookLibraryController : Controller
     
     //skicka bok information från MVC till hyr API:
     [HttpPost]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Rent(int bookId)
     {
