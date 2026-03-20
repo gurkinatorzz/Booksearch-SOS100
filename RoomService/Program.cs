@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RoomService.Data;
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RoomDbContext>(options =>
     options.UseSqlite("Data Source=roomsv3.db")); 
@@ -28,6 +30,8 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
+    
 }
 
 app.UseHttpsRedirection();
