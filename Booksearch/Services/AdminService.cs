@@ -7,26 +7,64 @@ namespace Booksearch.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        private readonly string _apiKey;
 
         public UserApiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            // ✅ Remove API key handling - it's now handled in Program.cs like BookLibraryService
         }
 
-        private void SetApiKeyHeader()
+        // Login method for authentication
+        public async Task<LoginResult?> LoginAsync(string email, string password)
         {
-            // ✅ Remove this method or make it empty - API key is now set in Program.cs
-            // The HttpClient already has the API key as default header
+            try
+            {
+                var loginRequest = new
+                {
+                    Email = email,
+                    Password = password
+                };
+
+                var json = JsonSerializer.Serialize(loginRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("/api/users/login", content);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseJson = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<LoginResult>(responseJson, new JsonSerializerOptions 
+                    { 
+                        PropertyNameCaseInsensitive = true 
+                    });
+                }
+                
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        // API validation method
+        public async Task<bool> ValidateApiKeyAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/users/validate");
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
             try
             {
-                
                 var response = await _httpClient.GetAsync("/api/users");
             
                 if (response.IsSuccessStatusCode)
@@ -53,7 +91,6 @@ namespace Booksearch.Services
         {
             try
             {
-                
                 var response = await _httpClient.GetAsync($"/api/users/{id}");
             
                 if (response.IsSuccessStatusCode)
@@ -84,7 +121,6 @@ namespace Booksearch.Services
         {
             try
             {
-                
                 var json = JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
             
@@ -108,7 +144,6 @@ namespace Booksearch.Services
         {
             try
             {
-                
                 var json = JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
             
@@ -132,7 +167,6 @@ namespace Booksearch.Services
         {
             try
             {
-                
                 var response = await _httpClient.DeleteAsync($"/api/users/{id}");
                 
                 if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.NotFound)
@@ -181,5 +215,14 @@ namespace Booksearch.Services
         public string Email { get; set; } = "";
         public bool IsAdmin { get; set; }
         public string? PasswordHash { get; set; }
+    }
+
+    public class LoginResult
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public bool IsAdmin { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 }

@@ -1,8 +1,9 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserService.Data;
 using UserService.Models;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace UserService.Controllers
 {
@@ -11,10 +12,52 @@ namespace UserService.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserDbContext _context;
+        private readonly PasswordHasher<User> _passwordHasher;
 
-        public UsersController(UserDbContext context)
+        public UsersController(UserDbContext context, PasswordHasher<User> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
+        }
+
+        // Login endpoint
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest(new { message = "Email and password are required." });
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Invalid email or password." });
+            }
+
+            if (string.IsNullOrEmpty(user.PasswordHash))
+            {
+                return Unauthorized(new { message = "User has no password set." });
+            }
+
+            var verificationResult = _passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                request.Password);
+
+            if (verificationResult == PasswordVerificationResult.Failed)
+            {
+                return Unauthorized(new { message = "Invalid email or password." });
+            }
+
+            return Ok(new LoginResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                IsAdmin = user.IsAdmin,
+                Message = "Login successful"
+            });
         }
 
         // API Key validation endpoint
@@ -43,6 +86,7 @@ namespace UserService.Controllers
                 UserCount = _context.Users.Count()
             });
         }
+
 /* ------------------------------------------------------------------------- */
         // GET: api/users
         [HttpGet]
