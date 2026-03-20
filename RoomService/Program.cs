@@ -25,14 +25,14 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<RoomDbContext>();
     db.Database.EnsureCreated();
 }
+app.MapOpenApi();
+app.MapScalarApiReference();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-    
+    // lämna tomt eller ta bort if-blocket helt
 }
+
 
 app.UseHttpsRedirection();
 
