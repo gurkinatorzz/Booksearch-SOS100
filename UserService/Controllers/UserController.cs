@@ -168,5 +168,16 @@ namespace UserService.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }
+
+// Method to get current user info
+        [HttpGet("current/{email}")]
+        public async Task<ActionResult<User>> GetCurrentUser(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+                return NotFound();
+        
+            return user;
+        }
     }
 }
