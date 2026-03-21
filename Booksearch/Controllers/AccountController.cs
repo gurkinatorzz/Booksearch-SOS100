@@ -44,9 +44,9 @@ public class AccountController : Controller
             identity.AddClaim(new Claim("UserId", loginResult.Id.ToString()));
             
             if (loginResult.IsAdmin)
-            {
                 identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
-            }
+            else
+                identity.AddClaim(new Claim(ClaimTypes.Role, "Medarbetare"));
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 

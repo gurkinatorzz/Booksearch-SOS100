@@ -40,8 +40,10 @@
                         <hr class="dropdownDivider"/>
                         <a asp-controller="Rooms" asp-action="MinaBokningar" class="dropdownItem">Mina bokningar</a>
                         
-                        <a asp-controller="Rooms" asp-action="AllaBokningar" class="dropdownItem">Se alla bokningar</a>
-
+                        @if (User.IsInRole("Admin") || User.IsInRole("Medarbetare"))
+                        {
+                            <a asp-controller="Rooms" asp-action="AllaBokningar" class="dropdownItem">Se alla bokningar</a>
+                        }
                         @* WILLIAM: Ersätt href="#" med rätt länk *@
                         <a asp-controller="BookLoan" asp-action="Index" class="dropdownItem">Mina Lån</a>
                         <hr class="dropdownDivider"/>
