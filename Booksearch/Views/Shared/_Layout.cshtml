@@ -40,7 +40,7 @@
                         <hr class="dropdownDivider"/>
                         <a asp-controller="Rooms" asp-action="MinaBokningar" class="dropdownItem">Mina bokningar</a>
                         
-                        @if (User.IsInRole("Admin") || User.IsInRole("Medarbetare"))
+                        @if (User.IsInRole("Admin"))
                         {
                             <a asp-controller="Rooms" asp-action="AllaBokningar" class="dropdownItem">Se alla bokningar</a>
                         }

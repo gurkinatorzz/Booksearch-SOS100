@@ -164,7 +164,7 @@ public class RoomsController : Controller
     }
     
     // GET - alla bokningar (admin och medarbetare)
-    [Authorize(Roles = "Admin,Medarbetare")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AllaBokningar()
     {
         var bookings = new List<RoomBookingListVM>();
