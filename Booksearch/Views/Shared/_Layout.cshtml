@@ -42,6 +42,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <a asp-controller="Rooms" asp-action="AllaBokningar" class="dropdownItem">Se alla bokningar</a>
+                            <a asp-controller="Admin" asp-action="Index" class="dropdownItem">Admin Dashboard</a>
                         }
                         @* WILLIAM: Ersätt href="#" med rätt länk *@
                         <a asp-controller="BookLoan" asp-action="Index" class="dropdownItem">Mina Lån</a>
