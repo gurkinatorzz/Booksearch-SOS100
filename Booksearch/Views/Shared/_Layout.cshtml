@@ -34,8 +34,7 @@
                     </div>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        @* AXEL: Ersätt href="#" med rätt länk *@
-                        <a href="#" class="dropdownItem">Mitt konto</a>
+                        <a asp-controller="Account" asp-action="MyAccount" class="dropdownItem">Mitt konto</a>
 
                         <hr class="dropdownDivider"/>
                         <a asp-controller="Rooms" asp-action="MinaBokningar" class="dropdownItem">Mina bokningar</a>

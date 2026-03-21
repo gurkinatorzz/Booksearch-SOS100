@@ -1,0 +1,318 @@
+﻿@model Booksearch.ViewModels.AccountVM
+
+@{
+    ViewData["Title"] = "Mitt Konto";
+}
+
+<div class="account-container">
+    <h1>@ViewData["Title"]</h1>
+    
+    <div class="account-sections">
+        <!-- Account Information Section -->
+        <div class="account-section">
+            <h2>Kontoinformation</h2>
+            <form id="accountForm" class="account-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="accountId" value="@Model.Id" />
+                
+                <div class="form-group">
+                    <label for="accountName">Namn:</label>
+                    <input type="text" id="accountName" name="Name" value="@Model.Name" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountEmail">E-post:</label>
+                    <input type="email" id="accountEmail" name="Email" value="@Model.Email" required />
+                </div>
+                
+                @if (Model.IsAdmin)
+                {
+                    <div class="admin-badge">
+                        <span>Admin-användare</span>
+                    </div>
+                }
+                
+                <button type="submit" class="btn btn-primary">Uppdatera information</button>
+            </form>
+        </div>
+
+        <!-- Change Password Section -->
+        <div class="account-section">
+            <h2>Ändra lösenord</h2>
+            <form id="passwordForm" class="account-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="passwordUserId" value="@Model.Id" />
+                
+                <div class="form-group">
+                    <label for="currentPassword">Nuvarande lösenord:</label>
+                    <input type="password" id="currentPassword" name="CurrentPassword" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Nytt lösenord:</label>
+                    <input type="password" id="newPassword" name="NewPassword" required minlength="6" />
+                    <small>Minst 6 tecken</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Bekräfta nytt lösenord:</label>
+                    <input type="password" id="confirmPassword" name="ConfirmPassword" required />
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Ändra lösenord</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messageContainer" style="display: none;">
+        <div id="messageContent" class="alert"></div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .account-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .account-container h1 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .account-sections {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @@media (min-width: 768px) {
+            .account-sections {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .account-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .account-section h2 {
+            color: #34495e;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .account-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .form-group small {
+            color: #7f8c8d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .admin-badge {
+            margin: 1rem 0;
+        }
+
+        .admin-badge span {
+            background: #e74c3c;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        #messageContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Account information form
+            document.getElementById('accountForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                formData.append('Id', document.getElementById('accountId').value);
+                formData.append('Name', document.getElementById('accountName').value);
+                formData.append('Email', document.getElementById('accountEmail').value);
+                formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Uppdaterar...';
+                
+                fetch('@Url.Action("UpdateAccount", "Account")', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('success', data.message);
+                        // Reload page to reflect changes in navigation
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showMessage('danger', data.message || 'Ett fel uppstod');
+                    }
+                })
+                .catch(error => {
+                    showMessage('danger', 'Ett fel uppstod vid uppdatering');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Uppdatera information';
+                });
+            });
+
+            // Password form
+            document.getElementById('passwordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (newPassword !== confirmPassword) {
+                    showMessage('danger', 'Lösenorden matchar inte');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('UserId', document.getElementById('passwordUserId').value);
+                formData.append('CurrentPassword', document.getElementById('currentPassword').value);
+                formData.append('NewPassword', newPassword);
+                formData.append('ConfirmPassword', confirmPassword);
+                formData.append('__RequestVerificationToken', document.querySelector('input[name="__RequestVerificationToken"]').value);
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Ändrar...';
+                
+                fetch('@Url.Action("ChangePassword", "Account")', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('success', data.message);
+                        // Clear password form
+                        this.reset();
+                    } else {
+                        showMessage('danger', data.message || 'Ett fel uppstod');
+                    }
+                })
+                .catch(error => {
+                    showMessage('danger', 'Ett fel uppstod vid lösenordsändring');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Ändra lösenord';
+                });
+            });
+
+            function showMessage(type, message) {
+                const messageContainer = document.getElementById('messageContainer');
+                const messageContent = document.getElementById('messageContent');
+                
+                messageContent.className = `alert alert-${type}`;
+                messageContent.textContent = message;
+                messageContainer.style.display = 'block';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    messageContainer.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+}

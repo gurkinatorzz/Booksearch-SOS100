@@ -206,6 +206,34 @@ namespace Booksearch.Services
                 throw new Exception($"Connection error: {ex.Message}");
             }
         }
+
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            try
+            {
+                var requestData = new 
+                { 
+                    CurrentPassword = currentPassword,
+                    NewPassword = newPassword 
+                };
+                var json = JsonSerializer.Serialize(requestData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync($"/api/password/{userId}/change", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Change password failed: {response.StatusCode} - {errorContent}");
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Connection error: {ex.Message}");
+            }
+        }
     }
 
     public class UserDto
