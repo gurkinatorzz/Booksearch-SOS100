@@ -7,8 +7,8 @@ using Booksearch.ViewModels;
 using System.Text.Json;
 
 namespace Booksearch.Controllers;
- 
-[Authorize]
+
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly UserApiService _userApiService;
