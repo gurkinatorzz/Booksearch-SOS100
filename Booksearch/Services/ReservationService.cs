@@ -4,6 +4,23 @@ namespace Booksearch.Services;
 
 public class ReservationService
 {
+    private readonly HttpClient _httpClient;
+
+    public ReservationService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task<BookReservation[]> GetReservations(int bookId)
+    {
+        var result = await _httpClient.GetFromJsonAsync<BookReservation[]>($"reservations/{bookId}");
+        if (result == null)
+        {
+            return [];
+        }
+        return result;
+    }
+    
     // In-memory kö (enkel att komma igång med). Byt till DB senare om ni vill.
     private static readonly List<BookReservation> _reservations = new();
     private static int _nextId = 1;

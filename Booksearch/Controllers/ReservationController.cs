@@ -67,4 +67,6 @@ public class ReservationController : Controller
         _reservations.Cancel(reservationId);
         return RedirectToAction(nameof(Queue), new { bookId });
     }
+    
+    
 }

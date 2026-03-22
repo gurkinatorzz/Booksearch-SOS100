@@ -5,6 +5,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//Rayan--- Rör Ej!-------------------------------------------------------------
+
+//add httpclient to reservation
+builder.Services.AddHttpClient<ReservationService>((serviceProvider, httpClient) =>
+{
+    //hämta config
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    
+    //Hämta adress 
+    string adress =config.GetValue<string>("ReservationServiceAdress") ?? "";
+   
+    httpClient.BaseAddress = new Uri(adress);
+});
+
 //WIlliam --- RÖR EJ
 //Lägg till httpclient till BookLoan
 builder.Services.AddHttpClient<BookLoanApiService>((serviceProvider, httpClient) =>
