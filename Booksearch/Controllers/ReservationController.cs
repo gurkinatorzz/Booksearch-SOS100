@@ -36,7 +36,8 @@ public class ReservationController : Controller
 
         try
         {
-            await _reservations.Reserve(vm.BookId, vm.UserName);
+            vm.UserName = User.Identity!.Name!;
+            await _reservations.Reserve(vm.BookId, User.Identity!.Name!);
             return RedirectToAction(nameof(Queue), new { bookId = vm.BookId });
         }
         catch (Exception ex)

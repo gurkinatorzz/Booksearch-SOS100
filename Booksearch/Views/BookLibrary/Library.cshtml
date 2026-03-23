@@ -55,6 +55,12 @@
                    asp-route-bookTitle="@Book.Title">
                     <button class="rentButton">Hyr bok</button>
                 </a>
+                <a asp-controller="Reservation"
+                   asp-action="Create"
+                   asp-route-bookId="@Book.Id">
+                    <button>Reservera bok</button>
+                </a>
+            
                 </div>
         }
     }

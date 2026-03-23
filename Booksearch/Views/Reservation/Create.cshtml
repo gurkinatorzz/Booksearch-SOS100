@@ -16,7 +16,7 @@
         <p class="reservationInfo">
             Reservera boken om den redan är utlånad. Du hamnar då sist i kön.
         </p>
-
+        <p>Inloggad som: @User.Identity.Name</p>
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
 
@@ -25,7 +25,6 @@
 
             <div class="reservationField">
                 <label asp-for="UserName">Namn</label>
-                <input asp-for="UserName" class="reservationInput" />
                 <span asp-validation-for="UserName" class="reservationError"></span>
             </div>
 
