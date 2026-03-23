@@ -1,78 +1,81 @@
+@if (User.IsInRole("Admin"))
+{
+
 @model Booksearch.ViewModels.LibraryAdmin
 
 <h1 style="text-decoration: underline 2px solid var(--color-theme2); text-underline-offset: 3px; ">Hantera böcker, författare och kategorier</h1>
 
-@if (!string.IsNullOrWhiteSpace(Model.ApiError))
-{
-    <div style="padding:10px; border:1px solid #cc0000; background:#ffe5e5; margin-bottom:16px;">
-        <strong>API-fel:</strong> @Model.ApiError
-    </div>
-}
+    @if (!string.IsNullOrWhiteSpace(Model.ApiError))
+    {
+        <div style="padding:10px; border:1px solid #cc0000; background:#ffe5e5; margin-bottom:16px;">
+            <strong>API-fel:</strong> @Model.ApiError
+        </div>
+    }
 
-<h2>Skapa bok</h2>
+    <h2>Skapa bok</h2>
 
-<form asp-action="CreateFromAdmin" method="post" style="margin-bottom:24px;">
-    @Html.AntiForgeryToken()
+    <form asp-action="CreateFromAdmin" method="post" style="margin-bottom:24px;">
+        @Html.AntiForgeryToken()
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; max-width:800px;">
-        <div>
-            <label style="display:block;">Titel</label>
-            <input asp-for="Form.Title" style="width:100%; padding:6px;" />
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; max-width:800px;">
+            <div>
+                <label style="display:block;">Titel</label>
+                <input asp-for="Form.Title" style="width:100%; padding:6px;"/>
+            </div>
+
+            <div>
+                <label style="display:block;">År</label>
+                <input asp-for="Form.Year" type="number" style="width:100%; padding:6px;"/>
+            </div>
+
+            <div>
+                <label style="display:block;">Välj författare</label>
+                <select asp-for="Form.AuthorId" style="width:100%; padding:6px;">
+                    @foreach (var a in Model.Form.Authors)
+                    {
+                        <option value="@a.Id">@a.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label style="display:block;">Eller ny författare</label>
+                <input asp-for="Form.NewAuthorName" style="width:100%; padding:6px;"/>
+            </div>
+
+            <div>
+                <label style="display:block;">Välj kategori</label>
+                <select asp-for="Form.CategoryId" style="width:100%; padding:6px;">
+                    @foreach (var c in Model.Form.Categories)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label style="display:block;">Eller ny kategori</label>
+                <input asp-for="Form.NewCategoryName" style="width:100%; padding:6px;"/>
+            </div>
         </div>
 
-        <div>
-            <label style="display:block;">År</label>
-            <input asp-for="Form.Year" type="number" style="width:100%; padding:6px;" />
+        <div style="margin-top:12px;">
+            <button type="submit" style="padding:8px 14px;">Skapa bok</button>
         </div>
+    </form>
 
-        <div>
-            <label style="display:block;">Välj författare</label>
-            <select asp-for="Form.AuthorId" style="width:100%; padding:6px;">
-                @foreach (var a in Model.Form.Authors)
-                {
-                    <option value="@a.Id">@a.Name</option>
-                }
-            </select>
-        </div>
+    <hr/>
 
-        <div>
-            <label style="display:block;">Eller ny författare</label>
-            <input asp-for="Form.NewAuthorName" style="width:100%; padding:6px;" />
-        </div>
+    <h2>Böcker</h2>
 
-        <div>
-            <label style="display:block;">Välj kategori</label>
-            <select asp-for="Form.CategoryId" style="width:100%; padding:6px;">
-                @foreach (var c in Model.Form.Categories)
-                {
-                    <option value="@c.Id">@c.Name</option>
-                }
-            </select>
-        </div>
-
-        <div>
-            <label style="display:block;">Eller ny kategori</label>
-            <input asp-for="Form.NewCategoryName" style="width:100%; padding:6px;" />
-        </div>
-    </div>
-
-    <div style="margin-top:12px;">
-        <button type="submit" style="padding:8px 14px;">Skapa bok</button>
-    </div>
-</form>
-
-<hr />
-
-<h2>Böcker</h2>
-
-@if (Model.Books == null || !Model.Books.Any())
-{
-    <p>Inga böcker hittades.</p>
-}
-else
-{
-    <table style="border-collapse:collapse; width:100%; max-width:1100px;">
-        <thead>
+    @if (Model.Books == null || !Model.Books.Any())
+    {
+        <p>Inga böcker hittades.</p>
+    }
+    else
+    {
+        <table style="border-collapse:collapse; width:100%; max-width:1100px;">
+            <thead>
             <tr>
                 <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Titel</th>
                 <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">År</th>
@@ -80,214 +83,230 @@ else
                 <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Kategori</th>
                 <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
             </tr>
-        </thead>
+            </thead>
 
-        <tbody>
-        @foreach (var b in Model.Books)
-        {
-            var isEditing = (Model.Form?.Id.HasValue == true && Model.Form.Id.Value == b.Id);
+            <tbody>
+            @foreach (var b in Model.Books)
+            {
+                var isEditing = (Model.Form?.Id.HasValue == true && Model.Form.Id.Value == b.Id);
 
+                <tr>
+                    @if (!isEditing)
+                    {
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@b.Title</td>
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@b.Year</td>
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@b.Author</td> /*stod AuthorName innan*/
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@b.Category</td> /*stod CateGoryName innan*/
+                        <td style="border-bottom:1px solid #eee; padding:8px;">
+                            <a asp-action="LibraryAdmin" asp-route-editId="@b.Id" asp-fragment="books" style="margin-right:10px;">Ändra</a>
+
+                            <form asp-action="DeleteBookFromAdmin" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@b.Id"/>
+                                <button type="submit"
+                                        onclick="return confirm('Ta bort boken: @b.Title ?');"
+                                        style="padding:6px 10px;">
+                                    Ta bort
+                                </button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td colspan="5" style="border-bottom:1px solid #eee; padding:8px;">
+                            <form asp-action="Edit" method="post">
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" asp-for="Form.Id"/>
+
+                                <div style="display:grid; grid-template-columns: 1fr 140px 1fr 1fr; gap:10px; align-items:end;">
+                                    <div>
+                                        <label style="display:block;">Titel</label>
+                                        <input asp-for="Form.Title" style="width:100%; padding:6px;"/>
+                                    </div>
+
+                                    <div>
+                                        <label style="display:block;">År</label>
+                                        <input asp-for="Form.Year" type="number" style="width:100%; padding:6px;"/>
+                                    </div>
+
+                                    <div>
+                                        <label style="display:block;">Författare</label>
+                                        <select asp-for="Form.AuthorId" style="width:100%; padding:6px;">
+                                            @if (Model.Form?.Authors != null)
+                                            {
+                                                @foreach (var a in Model.Form.Authors)
+                                                {
+                                                    <option value="@a.Id">@a.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                        <input asp-for="Form.NewAuthorName" placeholder="eller ny författare"
+                                               style="width:100%; padding:6px; margin-top:6px;"/>
+                                    </div>
+
+                                    <div>
+                                        <label style="display:block;">Kategori</label>
+                                        <select asp-for="Form.CategoryId" style="width:100%; padding:6px;">
+                                            @if (Model.Form?.Categories != null)
+                                            {
+                                                @foreach (var c in Model.Form.Categories)
+                                                {
+                                                    <option value="@c.Id">@c.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                        <input asp-for="Form.NewCategoryName" placeholder="eller ny kategori"
+                                               style="width:100%; padding:6px; margin-top:6px;"/>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top:10px;">
+                                    <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
+                                    <a asp-action="LibraryAdmin">Avbryt</a>
+                                </div>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <hr/>
+    <h2>Författare</h2>
+
+    @if (Model.Authors == null || !Model.Authors.Any())
+    {
+        <p>Inga författare hittades.</p>
+    }
+    else
+    {
+        <table style="border-collapse:collapse; width:100%; max-width:800px; margin-bottom:24px;">
+            <thead>
             <tr>
-                @if (!isEditing)
-                {
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@b.Title</td>
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@b.Year</td>
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@b.Author</td> /*stod AuthorName innan*/
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@b.Category</td> /*stod CateGoryName innan*/
-                    <td style="border-bottom:1px solid #eee; padding:8px;">
-                        <a asp-action="LibraryAdmin" asp-route-editId="@b.Id" asp-fragment="books" style="margin-right:10px;">Ändra</a>
-
-                        <form asp-action="DeleteBookFromAdmin" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@b.Id" />
-                            <button type="submit"
-                                    onclick="return confirm('Ta bort boken: @b.Title ?');"
-                                    style="padding:6px 10px;">
-                                Ta bort
-                            </button>
-                        </form>
-                    </td>
-                }
-                else
-                {
-                    <td colspan="5" style="border-bottom:1px solid #eee; padding:8px;">
-                        <form asp-action="Edit" method="post">
-                            @Html.AntiForgeryToken()
-
-                            <input type="hidden" asp-for="Form.Id" />
-
-                            <div style="display:grid; grid-template-columns: 1fr 140px 1fr 1fr; gap:10px; align-items:end;">
-                                <div>
-                                    <label style="display:block;">Titel</label>
-                                    <input asp-for="Form.Title" style="width:100%; padding:6px;" />
-                                </div>
-
-                                <div>
-                                    <label style="display:block;">År</label>
-                                    <input asp-for="Form.Year" type="number" style="width:100%; padding:6px;" />
-                                </div>
-
-                                <div>
-                                    <label style="display:block;">Författare</label>
-                                    <select asp-for="Form.AuthorId" style="width:100%; padding:6px;">
-                                        @foreach (var a in Model.Form.Authors)
-                                        {
-                                            <option value="@a.Id">@a.Name</option>
-                                        }
-                                    </select>
-                                    <input asp-for="Form.NewAuthorName" placeholder="eller ny författare"
-                                           style="width:100%; padding:6px; margin-top:6px;" />
-                                </div>
-
-                                <div>
-                                    <label style="display:block;">Kategori</label>
-                                    <select asp-for="Form.CategoryId" style="width:100%; padding:6px;">
-                                        @foreach (var c in Model.Form.Categories)
-                                        {
-                                            <option value="@c.Id">@c.Name</option>
-                                        }
-                                    </select>
-                                    <input asp-for="Form.NewCategoryName" placeholder="eller ny kategori"
-                                           style="width:100%; padding:6px; margin-top:6px;" />
-                                </div>
-                            </div>
-
-                            <div style="margin-top:10px;">
-                                <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
-                                <a asp-action="LibraryAdmin">Avbryt</a>
-                            </div>
-                        </form>
-                    </td>
-                }
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+            @foreach (var a in Model.Authors)
+            {
+                var isEditingAuthor = Model.AuthorForm?.Id == a.Id;
 
-<hr />
-<h2>Författare</h2>
+                <tr>
+                    @if (!isEditingAuthor)
+                    {
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@a.Name</td>
+                        <td style="border-bottom:1px solid #eee; padding:8px;">
+                            <a asp-action="LibraryAdmin" asp-route-editAuthorId="@a.Id" asp-fragment="authors" style="margin-right:10px;">Ändra</a>
 
-@if (Model.Authors == null || !Model.Authors.Any())
-{
-    <p>Inga författare hittades.</p>
+                            <form asp-action="DeleteAuthorFromAdmin" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@a.Id"/>
+                                <button type="submit"
+                                        onclick="return confirm('Ta bort författaren: @a.Name ?');"
+                                        style="padding:6px 10px;">
+                                    Ta bort
+                                </button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
+                            <form asp-action="EditAuthor" method="post" style="display:flex; gap:10px; align-items:end;">
+                                @Html.AntiForgeryToken()
+                                <input asp-for="AuthorForm.Id" type="hidden"/>
+
+                                <div style="flex:1;">
+                                    <label style="display:block;">Namn</label>
+                                    <input asp-for="AuthorForm.Name" style="width:100%; padding:6px;"/>
+                                </div>
+
+                                <div>
+                                    <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
+                                    <a asp-action="LibraryAdmin">Avbryt</a>
+                                </div>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <hr/>
+    <h2>Kategorier</h2>
+
+    @if (Model.Categories == null || !Model.Categories.Any())
+    {
+        <p>Inga kategorier hittades.</p>
+    }
+    else
+    {
+        <table style="border-collapse:collapse; width:100%; max-width:800px;">
+            <thead>
+            <tr>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
+                <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model.Categories)
+            {
+                var isEditingCategory = Model.CategoryForm?.Id == c.Id;
+
+                <tr>
+                    @if (!isEditingCategory)
+                    {
+                        <td style="border-bottom:1px solid #eee; padding:8px;">@c.Name</td>
+                        <td style="border-bottom:1px solid #eee; padding:8px;">
+                            <a asp-action="LibraryAdmin" asp-route-editCategoryId="@c.Id" asp-fragment="categories" style="margin-right:10px;">Ändra</a>
+
+                            <form asp-action="DeleteCategoryFromAdmin" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@c.Id"/>
+                                <button type="submit"
+                                        onclick="return confirm('Ta bort kategorin: @c.Name ?');"
+                                        style="padding:6px 10px;">
+                                    Ta bort
+                                </button>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
+                            <form asp-action="EditCategory" method="post" style="display:flex; gap:10px; align-items:end;">
+                                @Html.AntiForgeryToken()
+                                <input asp-for="CategoryForm.Id" type="hidden"/>
+
+                                <div style="flex:1;">
+                                    <label style="display:block;">Namn</label>
+                                    <input asp-for="CategoryForm.Name" style="width:100%; padding:6px;"/>
+                                </div>
+
+                                <div>
+                                    <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
+                                    <a asp-action="LibraryAdmin">Avbryt</a>
+                                </div>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
 }
 else
 {
-    <table style="border-collapse:collapse; width:100%; max-width:800px; margin-bottom:24px;">
-        <thead>
-        <tr>
-            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
-            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var a in Model.Authors)
-        {
-            var isEditingAuthor = Model.AuthorForm?.Id == a.Id;
-
-            <tr>
-                @if (!isEditingAuthor)
-                {
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@a.Name</td>
-                    <td style="border-bottom:1px solid #eee; padding:8px;">
-                        <a asp-action="LibraryAdmin" asp-route-editAuthorId="@a.Id" asp-fragment="authors" style="margin-right:10px;">Ändra</a>
-
-                        <form asp-action="DeleteAuthorFromAdmin" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@a.Id" />
-                            <button type="submit"
-                                    onclick="return confirm('Ta bort författaren: @a.Name ?');"
-                                    style="padding:6px 10px;">
-                                Ta bort
-                            </button>
-                        </form>
-                    </td>
-                }
-                else
-                {
-                    <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
-                        <form asp-action="EditAuthor" method="post" style="display:flex; gap:10px; align-items:end;">
-                            @Html.AntiForgeryToken()
-                            <input asp-for="AuthorForm.Id" type="hidden" />
-
-                            <div style="flex:1;">
-                                <label style="display:block;">Namn</label>
-                                <input asp-for="AuthorForm.Name" style="width:100%; padding:6px;" />
-                            </div>
-
-                            <div>
-                                <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
-                                <a asp-action="LibraryAdmin">Avbryt</a>
-                            </div>
-                        </form>
-                    </td>
-                }
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-<hr />
-<h2>Kategorier</h2>
-
-@if (Model.Categories == null || !Model.Categories.Any())
-{
-    <p>Inga kategorier hittades.</p>
-}
-else
-{
-    <table style="border-collapse:collapse; width:100%; max-width:800px;">
-        <thead>
-        <tr>
-            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Namn</th>
-            <th style="text-align:left; border-bottom:1px solid #ddd; padding:8px;">Åtgärder</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var c in Model.Categories)
-        {
-            var isEditingCategory = Model.CategoryForm?.Id == c.Id;
-
-            <tr>
-                @if (!isEditingCategory)
-                {
-                    <td style="border-bottom:1px solid #eee; padding:8px;">@c.Name</td>
-                    <td style="border-bottom:1px solid #eee; padding:8px;">
-                        <a asp-action="LibraryAdmin" asp-route-editCategoryId="@c.Id" asp-fragment="categories" style="margin-right:10px;">Ändra</a>
-
-                        <form asp-action="DeleteCategoryFromAdmin" method="post" style="display:inline;">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@c.Id" />
-                            <button type="submit"
-                                    onclick="return confirm('Ta bort kategorin: @c.Name ?');"
-                                    style="padding:6px 10px;">
-                                Ta bort
-                            </button>
-                        </form>
-                    </td>
-                }
-                else
-                {
-                    <td colspan="2" style="border-bottom:1px solid #eee; padding:8px;">
-                        <form asp-action="EditCategory" method="post" style="display:flex; gap:10px; align-items:end;">
-                            @Html.AntiForgeryToken()
-                            <input asp-for="CategoryForm.Id" type="hidden" />
-
-                            <div style="flex:1;">
-                                <label style="display:block;">Namn</label>
-                                <input asp-for="CategoryForm.Name" style="width:100%; padding:6px;" />
-                            </div>
-
-                            <div>
-                                <button type="submit" style="padding:6px 12px; margin-right:10px;">Spara</button>
-                                <a asp-action="LibraryAdmin">Avbryt</a>
-                            </div>
-                        </form>
-                    </td>
-                }
-            </tr>
-        }
-        </tbody>
-    </table>
+    <h1>Hoppsan!</h1>
+    <p>Du är inte admin, åtkomsten till denna sida är därför nekad.</p>
+    <a asp-controller="Home" asp-action="Index" style="color: grey;">
+        Tillbaka till startsidan
+    </a>
 }

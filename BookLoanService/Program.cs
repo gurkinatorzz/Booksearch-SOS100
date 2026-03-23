@@ -3,6 +3,7 @@ using BookLoanService.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,8 +29,17 @@ builder.Services.AddHttpClient<LoanService>((serviceProvider, httpClient) =>
     
     httpClient.BaseAddress = new Uri(adress);
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactAppPolicy", policy =>
+    { 
+        policy.WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
-var app = builder.Build();
+var app = builder.Build(); 
 
 using (var scope = app.Services.CreateScope())
 {
@@ -52,5 +62,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("ReactAppPolicy");
 
 app.Run();

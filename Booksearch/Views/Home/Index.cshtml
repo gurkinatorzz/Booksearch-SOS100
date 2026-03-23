@@ -8,6 +8,49 @@
 }
 
 @* unikt innehåll per sida!*@
+@*<div class="landpage">
+    <div class="landPageText">
+        <h1>Välkommen till BookSearch</h1>
+        <p>Hitta böcker. Upptäck nya världar.™</p>        
+    </div>
+    <img src="images/HomepageLibrary.jpg"/>
+</div>*@
+@if (User.Identity != null && !User.Identity.IsAuthenticated)
+{
+    <h1 style="text-align: center; font-size: 4em; margin-bottom: 0; text-decoration: underline 4px solid var(--color-theme2); text-underline-offset: 5px">Välkommen till BookSearch</h1>    
+}
+else
+{
+    <h1 style="text-align: center; font-size: 4em; margin-bottom: 0; text-decoration: underline 4px solid var(--color-theme2); text-underline-offset: 5px">Välkommen @(User.Identity?.Name)</h1>
+}
+
+<div class="landingPage">
+    <h1>Hitta böcker. Upptäck nya världar.™</h1>
+    <img src="images/books2.png"/>
+    
+    @if (User.Identity != null && !User.Identity.IsAuthenticated)
+    {
+        <p>Välkommen att utforska vårat bibliotek. Just nu besöker du sidan som gäst, vänligen <strong>logga in</strong> för åtkomst till fler funktioner.</p>
+        <div class="landingPageButtons">
+            <a asp-controller="Account" asp-action="Login">Logga in</a>
+            <a asp-controller="BookLibrary" asp-action="Index">Bibliotek</a>
+        </div>        
+    }
+    else if (User.IsInRole("Admin"))
+    {
+        <div class="landingPageButtons">
+            <a asp-controller="Admin" asp-action="Index" style="border-radius: 15px; border: 2px solid var(--color-theme2);">Admin dashboard</a>
+        </div>
+    }
+    else
+    {
+        <div class="landingPageButtons">
+            <a asp-controller="BookLoan" asp-action="Index">Mina lån</a>
+            <a asp-controller="Rooms" asp-action="MinaBokningar">Mina bokningar</a>
+        </div>
+    }
+</div>
+<hr style="border: none; height: 1px; background-color: var(--color-theme2); margin-top: 50px;">
 <div class="previewBox">
     <section class="previewBoxLeft">
         <img class="previewBoxImg" src="~/images/librarypicture.png" alt="bibliotek"/>

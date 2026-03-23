@@ -6,5 +6,5 @@ public class BookReservation
     public int BookId { get; set; }
     public string UserName { get; set; } = "";
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
-    public ReservationStatus Status { get; set; } = ReservationStatus.Active;
+    public bool IsComplete { get; set; }
 }

@@ -407,3 +407,41 @@ a:hover, button:hover {
   color: var(--color-bg);
   font-weight: 500;
 }
+
+.badge-dot {
+  position: absolute;
+  top: 2px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.loan-nav-item {
+  position: relative;
+  display: inline-block;
+}
+
+.loan-link {
+  display: inline-block;
+  position: relative;
+  padding-right: 10px;
+}
+
+.loan-dot {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red-dot {
+  background-color: red;
+}
+
+.orange-dot {
+  background-color: orange;
+}

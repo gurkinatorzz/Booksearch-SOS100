@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOA100-bookLibrary", "SOA100-bookLibrary\SOA100-bookLibrary.csproj", "{2EBB8FA3-4D13-4BEE-BB39-784D61B2FFE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservationServices", "ReservationServices\ReservationServices.csproj", "{DDA2E2CE-94EE-4797-AFB4-AD3B046A77DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,5 +36,9 @@ Global
 		{2EBB8FA3-4D13-4BEE-BB39-784D61B2FFE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD9C87FB-508A-4CE2-A7F7-0885ECDBBB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA2E2CE-94EE-4797-AFB4-AD3B046A77DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA2E2CE-94EE-4797-AFB4-AD3B046A77DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA2E2CE-94EE-4797-AFB4-AD3B046A77DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA2E2CE-94EE-4797-AFB4-AD3B046A77DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

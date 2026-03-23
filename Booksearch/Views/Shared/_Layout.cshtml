@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using Booksearch.Models
+@inject Booksearch.Services.BookLoanApiService BookLoanApiService
+@{
+    var hasUrgentLoan = false;
+    var hasOverdueLoan = false;
+
+    if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        var userLoans = await BookLoanApiService.GetUserLoans(User.Identity.Name!);
+        var now = DateTime.Now;
+
+        hasUrgentLoan = userLoans.Any(l => l.DueDate >= now && l.DueDate <= now.AddHours(24));
+        hasOverdueLoan = userLoans.Any(l => l.DueDate < now);
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -18,6 +33,8 @@
     <nav class="navbar">
         <div class="navbarTop">
             <div class="loggedInAs"><p>Inloggad som: <strong>@(User.Identity?.Name ?? "Gäst")</strong></p></div>
+            
+            @* inbox svg *@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                 <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/>
             </svg>
@@ -76,8 +93,23 @@
                     <li id="navBooking">
                         <a asp-area="" asp-controller="Rooms" asp-action="BokaGrupprum">Bokning</a>
                     </li>
-                    <li>
-                        <a asp-area="" asp-controller="BookLoan" asp-action="Index">Mina Lån</a> @*lägg in korrekt länk*@
+                    @*<li>
+                        
+                        <a asp-area="" asp-controller="BookLoan" asp-action="Index">Mina Lån</a> $1$lägg in korrekt länk#1#
+                    </li>*@
+                    <li class="loan-nav-item">
+                        <a asp-area="" asp-controller="BookLoan" asp-action="Index" class="loan-link">
+                            Mina Lån
+                        </a>
+
+                        @if (hasOverdueLoan)
+                        {
+                            <span class="loan-dot red-dot"></span>
+                        }
+                        else if (hasUrgentLoan)
+                        {
+                            <span class="loan-dot orange-dot"></span>
+                        }
                     </li>
                     <li>
                         <a asp-controller="Reservation" asp-action="Queue" asp-route-bookId="1">
@@ -113,10 +145,17 @@
     <div>
         <h2>Snabblänkar</h2>
         <a asp-action="Index" asp-controller="BookLibrary"><p id="fastLinks">Bibliotek</p></a>
-        <a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p id="fastLinks">Administrera bibliotek</p></a>
+        @*<a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p id="fastLinks">Administrera bibliotek</p></a>*@
+        <a asp-controller="BookLoan" asp-action="Index">
+            <p id="fastLinks">Mina lån</p>
+        </a>
         <a id="footerBooking" asp-action="BokaGrupprum" asp-controller="Rooms">
             <p id="fastLinks">Boka grupprum</p>
         </a>
+        <a id="footerBooking" asp-action="MinaBokningar" asp-controller="Rooms">
+            <p id="fastLinks">Mina bokningar</p>
+        </a>
+
         @if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             <a asp-controller="Account" asp-action="Logout"><p id="loggaInP">Logga ut</p></a>    

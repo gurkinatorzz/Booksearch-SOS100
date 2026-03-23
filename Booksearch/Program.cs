@@ -5,6 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//Rayan- Rör ej-------------------------------------------------------------------------
+builder.Services.AddHttpClient<ReservationService>((serviceProvider, httpClient) =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    string adress = config.GetValue<string>("ReservationServiceAdress") ?? "";
+    httpClient.BaseAddress = new Uri(adress);
+});
 //WIlliam --- RÖR EJ
 //Lägg till httpclient till BookLoan
 builder.Services.AddHttpClient<BookLoanApiService>((serviceProvider, httpClient) =>
@@ -43,9 +50,6 @@ builder.Services.AddHttpClient<UserApiService>((serviceProvider, httpClient) =>
     
     httpClient.DefaultRequestHeaders.Add("X-API-Key", apiKey);
 });
-
-builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
