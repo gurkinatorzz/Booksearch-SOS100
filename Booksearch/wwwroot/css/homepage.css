@@ -1,8 +1,33 @@
-body {
-    /*background-color: pink;*/
-    
+.landpage {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    margin-top: 50px;
 }
+.landpage h1 {
+    color: white;
+    font-size: 50px;
+    /*background-color: var(--color-theme2);*/
+    text-decoration: underline 2px solid var(--color-theme2);
+    text-shadow: -1px -1px 0 grey;
+    margin-bottom: 10px;
+}
+.landpage p {
+    color: white;
+    margin-top: 1px;
+}
+.landPageText {
+    position: absolute;
 
+
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+}
+.landpage img {
+    max-width: 100%;
+    object-fit: contain;
+}
 .previewBox {
     width: 100%;
     min-height: 50vh;

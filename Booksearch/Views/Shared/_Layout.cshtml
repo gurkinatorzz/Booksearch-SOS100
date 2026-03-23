@@ -146,9 +146,16 @@
         <h2>Snabblänkar</h2>
         <a asp-action="Index" asp-controller="BookLibrary"><p id="fastLinks">Bibliotek</p></a>
         @*<a asp-action="LibraryAdmin" asp-controller="BookLibrary"><p id="fastLinks">Administrera bibliotek</p></a>*@
+        <a asp-controller="BookLoan" asp-action="Index">
+            <p id="fastLinks">Mina lån</p>
+        </a>
         <a id="footerBooking" asp-action="BokaGrupprum" asp-controller="Rooms">
             <p id="fastLinks">Boka grupprum</p>
         </a>
+        <a id="footerBooking" asp-action="MinaBokningar" asp-controller="Rooms">
+            <p id="fastLinks">Mina bokningar</p>
+        </a>
+
         @if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             <a asp-controller="Account" asp-action="Logout"><p id="loggaInP">Logga ut</p></a>    
