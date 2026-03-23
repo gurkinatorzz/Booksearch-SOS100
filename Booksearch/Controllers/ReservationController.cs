@@ -29,14 +29,14 @@ public class ReservationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(ReservationCreateVm vm)
+    public async Task<IActionResult> Create(ReservationCreateVm vm)
     {
         if (!ModelState.IsValid)
             return View(vm);
 
         try
         {
-            _reservations.Reserve(vm.BookId, vm.UserName);
+            await _reservations.Reserve(vm.BookId, vm.UserName);
             return RedirectToAction(nameof(Queue), new { bookId = vm.BookId });
         }
         catch (Exception ex)
@@ -50,7 +50,7 @@ public class ReservationController : Controller
     public async Task<IActionResult> Queue(int bookId)
     {
         var book = await _bookLibrary.GetBookById(bookId);
-        var queue = _reservations.GetQueue(bookId);
+        var queue = await _reservations.GetQueue(bookId);
 
         return View(new ReservationQueueVm
         {
@@ -62,11 +62,9 @@ public class ReservationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Cancel(int reservationId, int bookId)
+    public async Task<IActionResult> Cancel(int reservationId, int bookId)
     {
-        _reservations.Cancel(reservationId);
+        await _reservations.Cancel(reservationId);
         return RedirectToAction(nameof(Queue), new { bookId });
     }
-    
-    
 }

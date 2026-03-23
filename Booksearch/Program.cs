@@ -43,7 +43,6 @@ builder.Services.AddHttpClient<BookLibraryService>((serviceProvider, httpClient)
     
 });
 /*--------------------------------------------------------------------------------*/
-builder.Services.AddSingleton<Booksearch.Services.ReservationService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
