@@ -37,7 +37,25 @@
                         <td>@loan.BookTitle</td>
                         <td>@loan.BorrowerName</td>
                         <td>@loan.LoanDate.ToString("yyyy-MM-dd")</td>
-                        <td>@loan.DueDate.ToString("yyyy-MM-dd")</td>
+                        @{
+                            var now = DateTime.Now;
+                            var timeLeft = loan.DueDate - now;
+                        }
+
+                        <td style="color:@(loan.DueDate < now ? "red" : (timeLeft.TotalHours <= 24 ? "orange" : "black"))">
+                            @loan.DueDate.ToString("yyyy-MM-dd HH:mm")
+
+                            @if (loan.DueDate < now)
+                            {
+                                <span> (försenad!)</span>
+                            }
+                            else if (timeLeft.TotalHours <= 24)
+                            {
+                                <span>
+                                    (kvar: @timeLeft.Hours h @timeLeft.Minutes min)
+                                </span>
+                            }
+                        </td>
                         <td class="actions">
 
                             <a class="editBtn" asp-action="Edit" asp-route-id="@loan.Id">Ändra</a>

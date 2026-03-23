@@ -20,12 +20,14 @@ public class BookLoanController : Controller
 
     public async Task<IActionResult> Index()
     {
+        await SetLoanReminder();
         var userLoans = await _bookLoanApiService.GetUserLoans(User.Identity!.Name!);
         return View(userLoans);
     }
 
     public IActionResult Create(int bookId, string bookTitle)
     {
+        
         ViewBag.BookId = bookId;
         ViewBag.BookTitle = bookTitle;
 
@@ -34,12 +36,14 @@ public class BookLoanController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(BookLoan bookLoan)
     {
+        await SetLoanReminder();
         bookLoan.BorrowerName = User.Identity!.Name!;
 
         var success = await _bookLoanApiService.CreateLoan(bookLoan);
 
         if (!success)
         {
+            await SetLoanReminder();
             ViewBag.Error = "Du har redan lånat denna bok.";
             ViewBag.BookId = bookLoan.BookId;
             ViewBag.BookTitle = bookLoan.BookTitle;
@@ -70,7 +74,17 @@ public class BookLoanController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(BookLoan bookLoan)
     {
+        await SetLoanReminder();
         await _bookLoanApiService.UpdateLoan(bookLoan);
         return RedirectToAction("Index");
+    }
+    
+    private async Task SetLoanReminder()
+    {
+        var userLoans = await _bookLoanApiService.GetUserLoans(User.Identity!.Name!);
+        var now = DateTime.Now;
+
+        ViewBag.HasUrgentLoan = userLoans.Any(l => l.DueDate >= now && l.DueDate <= now.AddHours(24));
+        ViewBag.HasOverdueLoan = userLoans.Any(l => l.DueDate < now);
     }
 }
