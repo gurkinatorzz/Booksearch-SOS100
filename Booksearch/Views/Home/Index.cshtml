@@ -30,7 +30,7 @@ else
     
     @if (User.Identity != null && !User.Identity.IsAuthenticated)
     {
-        <p>Just nu besöker du sidan som gäst. Vänligen logga in eller skapa ett konto idag!</p>
+        <p>Välkommen att utforska vårat bibliotek. Just nu besöker du sidan som gäst, vänligen <strong>logga in</strong> för åtkomst till fler funktioner.</p>
         <div class="landingPageButtons">
             <a asp-controller="Account" asp-action="Login">Logga in</a>
             <a asp-controller="BookLibrary" asp-action="Index">Bibliotek</a>
