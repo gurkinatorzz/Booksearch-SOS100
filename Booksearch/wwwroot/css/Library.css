@@ -59,7 +59,7 @@
 .bookRentalContainer > div > h2 {
     text-align: center;
 
-    height: 60px; /* FIXED höjd så de inte blir konstigt om det går över på flera rader! */
+    height: 80px; /* FIXED höjd så de inte blir konstigt om det går över på flera rader! */
     
     font-size: 20px;
     margin-top: 0;
@@ -83,6 +83,21 @@
     background-color: lightgreen;
     border: 1px solid black;
     border-radius: 15px;
+}
+
+.rentButton2 {
+    width: max-content;
+    background-color: var(--color-theme2);
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0 15px 0 5px;
+    border: none;
+    font-weight: 500;
+}
+.rentButton2:hover {
+    background-color: lightgreen;
 }
 .bookRentalContainer > div > button:hover {
     transform: scale(1.03);

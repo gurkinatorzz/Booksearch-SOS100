@@ -47,20 +47,18 @@
                 <p>@Book.Author</p>
                 <p>@Book.Category</p>
                 <p>@Book.Year</p>
-                
-				@* Knapp för att hyra bok, skickar med bokens id och titel! *@
-                <a asp-controller="BookLoan"
-                   asp-action="Create"
-                   asp-route-bookId="@Book.Id"
-                   asp-route-bookTitle="@Book.Title">
-                    <button class="rentButton">Hyr bok</button>
-                </a>
-                <a asp-controller="Reservation"
-                   asp-action="Create"
-                   asp-route-bookId="@Book.Id">
-                    <button>Reservera bok</button>
-                </a>
-            
+                    @* Knapp för att hyra bok, skickar med bokens id och titel! *@
+                    <a asp-controller="BookLoan"
+                       asp-action="Create"
+                       asp-route-bookId="@Book.Id"
+                       asp-route-bookTitle="@Book.Title">
+                        <button class="rentButton">Hyr</button>
+                    </a>
+                    <a asp-controller="Reservation"
+                       asp-action="Create"
+                       asp-route-bookId="@Book.Id">
+                        <button class="rentButton2">Reservera</button>
+                    </a>
                 </div>
         }
     }
