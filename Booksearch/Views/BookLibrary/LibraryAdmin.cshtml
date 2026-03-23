@@ -130,9 +130,12 @@ else
                                 <div>
                                     <label style="display:block;">Författare</label>
                                     <select asp-for="Form.AuthorId" style="width:100%; padding:6px;">
-                                        @foreach (var a in Model.Form.Authors)
+                                        @if (Model.Form?.Authors != null)
                                         {
-                                            <option value="@a.Id">@a.Name</option>
+                                            @foreach (var a in Model.Form.Authors)
+                                            {
+                                                <option value="@a.Id">@a.Name</option>
+                                            }
                                         }
                                     </select>
                                     <input asp-for="Form.NewAuthorName" placeholder="eller ny författare"
@@ -142,9 +145,12 @@ else
                                 <div>
                                     <label style="display:block;">Kategori</label>
                                     <select asp-for="Form.CategoryId" style="width:100%; padding:6px;">
-                                        @foreach (var c in Model.Form.Categories)
+                                        @if (Model.Form?.Categories != null)
                                         {
-                                            <option value="@c.Id">@c.Name</option>
+                                            @foreach (var c in Model.Form.Categories)
+                                            {
+                                                <option value="@c.Id">@c.Name</option>
+                                            }
                                         }
                                     </select>
                                     <input asp-for="Form.NewCategoryName" placeholder="eller ny kategori"
