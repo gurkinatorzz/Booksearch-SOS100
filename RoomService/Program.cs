@@ -39,11 +39,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapOpenApi();
 app.MapScalarApiReference();
-
-if (app.Environment.IsDevelopment())
-{
-    
-}
+app.MapGet("/", () => Results.Redirect("/scalar/v1"));
 
 app.UseCors("AllowReact");
 app.UseHttpsRedirection();
