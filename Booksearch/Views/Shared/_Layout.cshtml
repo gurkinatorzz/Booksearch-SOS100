@@ -1,7 +1,7 @@
 ﻿@using Booksearch.Models
 @inject Booksearch.Services.BookLoanApiService BookLoanApiService
 @{
-    var hasUrgentLoan = false;
+    var hasUrgentLoan = false; 
     var hasOverdueLoan = false;
 
     if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -112,7 +112,7 @@
                         }
                     </li>
                     <li>
-                        <a asp-controller="Reservation" asp-action="Queue" asp-route-bookId="1">
+                        <a asp-controller="Reservation" asp-action="MyReservations">
                             Reservationer
                         </a>
                     </li>
@@ -138,7 +138,7 @@
         <h2>Skapare</h2>
         <p>Axel Magnusson - Axma0007@student.hv.se</p>
         <p>Gustav Johansson - Gujo0020@student.hv.se</p>
-        <p>Rayan Hadrous - Rayan@student.hv.se</p>
+        <p>Rayan Hadrous - Raha0027@student.hv.se</p>
         <p>Roselle Ali - Roselle.ali@student.hv.se</p>
         <p>William Berge - Wibe0005@student.hv.se</p>
     </div>

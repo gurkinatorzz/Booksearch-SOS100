@@ -16,17 +16,14 @@
         <p class="reservationInfo">
             Reservera boken om den redan är utlånad. Du hamnar då sist i kön.
         </p>
+
         <p>Inloggad som: @User.Identity.Name</p>
+
         <form asp-action="Create" method="post">
             @Html.AntiForgeryToken()
 
             <input type="hidden" asp-for="BookId" />
             <input type="hidden" asp-for="BookTitle" />
-
-            <div class="reservationField">
-                <label asp-for="UserName">Namn</label>
-                <span asp-validation-for="UserName" class="reservationError"></span>
-            </div>
 
             <div asp-validation-summary="All" class="reservationError"></div>
 

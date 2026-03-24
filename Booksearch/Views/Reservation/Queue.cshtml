@@ -1,7 +1,8 @@
 ﻿@model Booksearch.ViewModels.ReservationQueueVm
 
 @{
-    ViewData["Title"] = "Kö";
+    ViewData["Title"] = "Reservationer";
+    var isMyReservationsPage = Model.BookId == 0;
 }
 
 @section Styles
@@ -9,9 +10,38 @@
     <link rel="stylesheet" href="~/css/Reservation.css"/>
 }
 
-<h1 class="bookRentalContainerTitle">Kö för: @Model.BookTitle</h1>
+@if (isMyReservationsPage)
+{
+    <h1 class="bookRentalContainerTitle">Mina reservationer</h1>
+}
+else
+{
+    <h1 class="bookRentalContainerTitle">Kö för: @Model.BookTitle</h1>
+}
 
 <div class="bookRentalContainer">
+
+    @if (!isMyReservationsPage)
+    {
+        var myReservation = Model.Reservations?.FirstOrDefault(r => r.UserName == User.Identity!.Name);
+
+        @if (myReservation != null)
+        {
+            <p>Du står i kö för denna bok.</p>
+        }
+        else
+        {
+            <p>Här visas hela kön för denna bok. Du har ingen aktiv reservation just nu.</p>
+        }
+    }
+
+    @if (TempData["ReservationError"] != null)
+    {
+        <div class="reservationCard">
+            <p class="reservationError">@TempData["ReservationError"]</p>
+        </div>
+    }
+
     @if (Model.Reservations != null && Model.Reservations.Any())
     {
         var place = 1;
@@ -19,16 +49,46 @@
         foreach (var r in Model.Reservations)
         {
             <div class="reservationCard">
-                <h2 class="reservationPlace">#@place</h2>
-                <p><strong>@r.UserName</strong></p>
-                <p class="reservationMeta">Skapad: @r.CreatedAtUtc.ToLocalTime()</p>
+                @if (isMyReservationsPage)
+                {
+                    <div style="display:flex; align-items:baseline; gap:10px;">
+                        <span style="font-size:1rem; font-weight:bold;">#@r.QueuePosition</span>
+                        <span><strong>@r.Title</strong></span>
+                    </div>
 
-                <form asp-action="Cancel" method="post" class="reservationInlineForm">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="reservationId" value="@r.Id" />
-                    <input type="hidden" name="bookId" value="@Model.BookId" />
-                    <button type="submit" class="reservationBtn reservationBtnDanger">Avboka</button>
-                </form>
+                    <p class="reservationMeta">Skapad: @r.CreatedAtUtc.ToLocalTime()</p>
+
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">                        <form asp-action="Cancel" method="post" class="reservationInlineForm">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="reservationId" value="@r.Id" />
+                            <input type="hidden" name="bookId" value="0" />
+                            <button type="submit" class="reservationBtn reservationBtnDanger">Avboka</button>
+                        </form>
+
+                        <form asp-action="Queue" method="get" class="reservationInlineForm">
+                            <input type="hidden" name="bookId" value="@r.BookId" />
+                            <button type="submit" class="reservationBtn reservationBtnDanger">
+                                Visa kö
+                            </button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <h2 class="reservationPlace">Köplats #@place</h2>
+                    <p><strong>@r.UserName</strong></p>
+                    <p class="reservationMeta">Skapad: @r.CreatedAtUtc.ToLocalTime()</p>
+
+                    @if (User.Identity?.Name == r.UserName)
+                    {
+                        <form asp-action="Cancel" method="post" class="reservationInlineForm">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="reservationId" value="@r.Id" />
+                            <input type="hidden" name="bookId" value="@Model.BookId" />
+                            <button type="submit" class="reservationBtn reservationBtnDanger">Avboka</button>
+                        </form>
+                    }
+                }
             </div>
 
             place++;
@@ -37,16 +97,26 @@
     else
     {
         <div class="reservationCard">
-            <p>Ingen står i kö just nu.</p>
+            @if (isMyReservationsPage)
+            {
+                <p>Du har inga aktiva reservationer just nu.</p>
+            }
+            else
+            {
+                <p>Ingen står i kö just nu.</p>
+            }
         </div>
     }
 
-    <div class="reservationCard reservationCardAction">
-        <a class="reservationBtnLink"
-           asp-controller="Reservation"
-           asp-action="Create"
-           asp-route-bookId="@Model.BookId">
-            Reservera boken
-        </a>
-    </div>
+    @if (!isMyReservationsPage)
+    {
+        <div class="reservationCard reservationCardAction">
+            <a class="reservationBtnLink"
+               asp-controller="Reservation"
+               asp-action="Create"
+               asp-route-bookId="@Model.BookId">
+                Reservera boken
+            </a>
+        </div>
+    }
 </div>

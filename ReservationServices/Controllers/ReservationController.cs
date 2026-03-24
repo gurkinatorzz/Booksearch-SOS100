@@ -36,6 +36,17 @@ public class ReservationController : ControllerBase
         return Ok(reservations);
     }
 
+    [HttpGet("user/{userName}")]
+    public ActionResult<IEnumerable<ReservationModels>> GetReservationsByUser(string userName)
+    {
+        var reservations = _dbContext.Reservations
+            .Where(r => r.UserName == userName && !r.IsComplete)
+            .OrderBy(r => r.CreatedAtUtc)
+            .ToList();
+
+        return Ok(reservations);
+    }
+
     [HttpPost]
     public IActionResult PostReservation([FromBody] ReservationModels reservation)
     {
@@ -47,7 +58,7 @@ public class ReservationController : ControllerBase
         var alreadyExists = _dbContext.Reservations.Any(r =>
             r.BookId == reservation.BookId &&
             !r.IsComplete &&
-            r.UserName.ToLower() == reservation.UserName.ToLower());
+            string.Equals(r.UserName, reservation.UserName, StringComparison.OrdinalIgnoreCase));
 
         if (alreadyExists)
             return BadRequest("Du står redan i kö för den här boken.");

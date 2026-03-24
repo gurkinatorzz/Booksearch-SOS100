@@ -18,6 +18,12 @@ public class ReservationService
         return result ?? [];
     }
 
+    public async Task<IReadOnlyList<BookReservation>> GetMyReservations(string userName)
+    {
+        var result = await _httpClient.GetFromJsonAsync<BookReservation[]>($"api/reservation/user/{userName}");
+        return result ?? [];
+    }
+
     public async Task Reserve(int bookId, string userName)
     {
         userName = (userName ?? "").Trim();
@@ -45,7 +51,12 @@ public class ReservationService
         var response = await _httpClient.PostAsJsonAsync("api/reservation", reservation);
 
         if (!response.IsSuccessStatusCode)
-            throw new Exception("Det gick inte att skapa reservationen.");
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            throw new Exception(string.IsNullOrWhiteSpace(error)
+                ? "Det gick inte att skapa reservationen."
+                : error);
+        }
     }
 
     public async Task Cancel(int reservationId)
