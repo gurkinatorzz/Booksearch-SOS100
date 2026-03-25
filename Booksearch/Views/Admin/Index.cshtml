@@ -1,13 +1,24 @@
-﻿<h1>Admin Dashboard</h1>
-<p>Welcome to the admin panel.</p>
+﻿<style> /* INLINE-styling */
+    #hoverEffekt:hover {
+        color: grey;
+    }
+</style>
+<h1 style="text-decoration: underline 2px solid var(--color-theme2); text-underline-offset: 5px;">Admin Dashboard</h1>
+<p>Välkommen till <strong>admin-panelen</strong>. <br/>Här kan du hantera olika tjänster på webbplatsen</p>
 
 <div class="row">
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">User Management</h5>
-                <p class="card-text">Add, edit, and remove users from the system.</p>
-                <a asp-action="UserAdmin" class="btn btn-primary">Manage Users</a>
+                <h3 style="text-decoration: underline 2px solid var(--color-theme2); padding: 0; margin: 0; margin-top: 50px;" class="card-title">Hantering av användare</h3>
+                <p class="card-text"><i>Lägg till, ta bort eller ändra användarkonton.</i></p>
+                <a id="hoverEffekt" asp-action="UserAdmin" class="btn btn-primary"
+                   style="
+                    border: 2px solid var(--color-theme2);
+                    padding: 3px 5px;
+                    border-radius: 5px;">
+                    Hantera användare
+                </a>
             </div>
         </div>
     </div>
@@ -15,13 +26,19 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Library Management</h5>
-                <p class="card-text">Manage books, authors, and categories.</p>
-                <a asp-controller="BookLibrary" asp-action="LibraryAdmin" class="btn btn-primary">Library Admin</a>
+                <h3 style="text-decoration: underline 2px solid var(--color-theme2); padding: 0; margin: 0; margin-top: 30px;" class="card-title">Hantering av bibliotek</h3>
+                <p class="card-text"><i>Hantera böcker, författare och kategorier.</i></p>
+                <a style="
+                    border: 2px solid var(--color-theme2);
+                    padding: 3px 5px;
+                    border-radius: 5px;"
+                   id="hoverEffekt"
+                   asp-controller="BookLibrary" asp-action="LibraryAdmin" class="btn btn-primary">Library Admin</a>
             </div>
         </div>
     </div>
 </div>
-
+<br/>
 <hr>
-<a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger">Log out</a>
+<a id="hoverEffekt" style="text-decoration: underline 2px solid var(--color-theme2); padding: 0; margin: 0; margin-top: 50px;)"
+                    asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger">Log out</a>
