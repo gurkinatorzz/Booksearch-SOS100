@@ -1,32 +1,42 @@
 
 .landingPage {
-    /*border: 1px solid black;*/
     width: 90%;
     margin: 0 0;
-    height: 500px;
+    height: 600px;
     box-sizing: border-box;
-    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(3, 1fr);
 }
 .landingPage h1 {
-    position: absolute;
-    top: 10%;
-    width: 30%;
+    grid-column: 1;
+    grid-row: 1;
+    text-wrap: wrap;
+    width: 7em;
+    height: max-content;
     font-size: 4em;
+    margin-top: 100px;
     margin-left: 40px;
+    margin-bottom: 0;
 }
 .landingPage p {
-    position: absolute;
-    bottom: 15%;
-    width: 30%;
+    grid-column: 1;
+    grid-row: 2;
+    width: 25em;
+    height: max-content;
     margin-left: 40px;
+    margin-bottom: 20px;
+    margin-top: 50px;
 }
 .landingPageButtons {
-    position: absolute;
-    bottom: 20px;
+    grid-column: 1;
+    grid-row: 3;
     width: max-content;
+    height: max-content;
     display: flex;
     margin-left: 40px;
     gap: 0;
+    margin-top: 0;
     
 }
 .landingPageButtons > a {
@@ -65,24 +75,13 @@
     transform: scale(1.07);
 }
 .landingPage img {
-    position: absolute;
-    right: -50px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 70%;
+    height:100%;
+    width: 100%;
+    object-fit: cover;
+    grid-column: 2;
+    grid-row: 1 / span 3
 }
-.landPageText {
-    position: absolute;
 
-
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, -50%);
-}
-.landpage img {
-    max-width: 100%;
-    object-fit: contain;
-}
 .previewBox {
     width: 100%;
     min-height: 50vh;
@@ -91,6 +90,7 @@
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
     margin-top: 100px;
     border-radius: 50px 0 0 50px;
+    overflow: hidden;
 }
 
 .previewBoxLeft {
@@ -125,7 +125,7 @@
 .previewBoxRight h1 {
     text-align: left;
     font-weight: bold;
-    font-size: 4em;
+    font-size: clamp(2rem, 5vw, 4rem);
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 10px;
@@ -140,7 +140,7 @@
 }
 .previewBoxRightP {
     border-bottom: 2px solid var(--color-theme2);
-    font-size: 1.5em;
+    font-size: clamp(1rem, 2vw, 1.5rem);
     /*color: #222020;*/
     color: black;
     opacity: 0.8;
@@ -210,7 +210,8 @@
 }
 
 .quoteBox {
-    width: 50vw;
+    max-width: 700px;
+    width: 90%;
     height: 20vh;
     /*border: 1px solid black;*/
     border-radius: 15px 15px 15px 15px;
@@ -238,7 +239,53 @@
     text-decoration-style: solid;
     text-decoration-color: var(--color-theme2);
 }
-/*
-.quoteBox p:nth-of-type(2) {
-    color: red;
-}*/
+
+/* media max-width: 650px*/
+@media (max-width: 650px) {
+    .landingPage {
+        width: 100%;
+        min-height: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        padding: 20px;
+    }
+
+    .landingPage h1 {
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        margin: 0 0 15px 0;
+        font-size: 2.2rem;
+    }
+
+    .landingPage p {
+        grid-column: 1;
+        grid-row: 2;
+        margin: 0 0 15px 0;
+        max-width: 100%;
+        font-size: 0.95rem;
+    }
+
+    .landingPageButtons {
+        grid-column: 1;
+        grid-row: 3;
+        margin: 0 0 20px 0;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .landingPageButtons > a {
+        flex: 1;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .landingPage img {
+        grid-column: 1;
+        grid-row: 4;
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+}
