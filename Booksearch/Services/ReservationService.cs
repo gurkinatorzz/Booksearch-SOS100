@@ -53,9 +53,8 @@ public class ReservationService
         if (!response.IsSuccessStatusCode)
         {
             var error = await response.Content.ReadAsStringAsync();
-            throw new Exception(string.IsNullOrWhiteSpace(error)
-                ? "Det gick inte att skapa reservationen."
-                : error);
+            throw new Exception(
+                $"Reservation API error. Status: {(int)response.StatusCode} {response.StatusCode}. Body: {error}");
         }
     }
 

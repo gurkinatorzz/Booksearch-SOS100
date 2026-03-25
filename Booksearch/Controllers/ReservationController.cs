@@ -30,6 +30,12 @@ public class ReservationController : Controller
         var activeLoans = await _bookLoanApiService.GetActiveLoans();
         var isLoaned = activeLoans.Any(x => x.BookId == bookId);
 
+        Console.WriteLine("------ DEBUG GET ------");
+        Console.WriteLine("BookId: " + bookId);
+        Console.WriteLine("Loans count: " + activeLoans.Count());
+        Console.WriteLine("IsLoaned: " + isLoaned);
+        Console.WriteLine("-----------------------");
+
         if (!isLoaned)
         {
             TempData["ReservationError"] = "Det går inte att reservera eftersom boken inte är utlånad.";
@@ -54,6 +60,13 @@ public class ReservationController : Controller
         {
             var activeLoans = await _bookLoanApiService.GetActiveLoans();
             var isLoaned = activeLoans.Any(x => x.BookId == vm.BookId);
+
+            Console.WriteLine("------ DEBUG POST ------");
+            Console.WriteLine("BookId: " + vm.BookId);
+            Console.WriteLine("Loans count: " + activeLoans.Count());
+            Console.WriteLine("IsLoaned: " + isLoaned);
+            Console.WriteLine("User: " + User.Identity!.Name);
+            Console.WriteLine("------------------------");
 
             if (!isLoaned)
             {

@@ -50,26 +50,34 @@ public class ReservationController : ControllerBase
     [HttpPost]
     public IActionResult PostReservation([FromBody] ReservationModels reservation)
     {
-        reservation.UserName = (reservation.UserName ?? "").Trim();
+        try
+        {
+            reservation.UserName = (reservation.UserName ?? "").Trim();
 
-        if (string.IsNullOrWhiteSpace(reservation.UserName))
-            return BadRequest("Namn måste fyllas i.");
+            if (string.IsNullOrWhiteSpace(reservation.UserName))
+                return BadRequest("Namn måste fyllas i.");
 
-        var alreadyExists = _dbContext.Reservations.Any(r =>
-            r.BookId == reservation.BookId &&
-            !r.IsComplete &&
-            string.Equals(r.UserName, reservation.UserName, StringComparison.OrdinalIgnoreCase));
+            var normalizedUserName = reservation.UserName.ToLower();            
+            var alreadyExists = _dbContext.Reservations.Any(r =>
+                r.BookId == reservation.BookId &&
+                !r.IsComplete &&
+                r.UserName.ToLower() == normalizedUserName);
 
-        if (alreadyExists)
-            return BadRequest("Du står redan i kö för den här boken.");
+            if (alreadyExists)
+                return BadRequest("Du står redan i kö för den här boken.");
 
-        reservation.CreatedAtUtc = DateTime.UtcNow;
-        reservation.IsComplete = false;
+            reservation.CreatedAtUtc = DateTime.UtcNow;
+            reservation.IsComplete = false;
 
-        _dbContext.Reservations.Add(reservation);
-        _dbContext.SaveChanges();
+            _dbContext.Reservations.Add(reservation);
+            _dbContext.SaveChanges();
 
-        return Ok(reservation);
+            return Ok(reservation);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.ToString());
+        }
     }
 
     [HttpDelete("{id}")]

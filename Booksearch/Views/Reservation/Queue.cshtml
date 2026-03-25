@@ -58,7 +58,8 @@ else
 
                     <p class="reservationMeta">Skapad: @r.CreatedAtUtc.ToLocalTime()</p>
 
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">                        <form asp-action="Cancel" method="post" class="reservationInlineForm">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                        <form asp-action="Cancel" method="post" class="reservationInlineForm">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="reservationId" value="@r.Id" />
                             <input type="hidden" name="bookId" value="0" />
