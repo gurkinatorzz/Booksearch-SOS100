@@ -38,12 +38,14 @@ else
     }
     else if (User.IsInRole("Admin"))
     {
+        <p>Välkommen <strong>@(User.Identity?.Name)</strong>. Du har administratör-status och kan se över admin dashboard på knappen nedan.<br/>Du kan även hantera konton, böcker och bokningar av grupprum.</p>
         <div class="landingPageButtons">
             <a asp-controller="Admin" asp-action="Index" style="border-radius: 15px; border: 2px solid var(--color-theme2);">Admin dashboard</a>
         </div>
     }
     else
     {
+        <p>Välkommen till BookSearch <strong>@(User.Identity?.Name)</strong>. Se över dina lån eller bokningar enkelt. Du kan även reservera en bok i förväg eller bara bläddra igenom vårt stora utbud.</p>
         <div class="landingPageButtons">
             <a asp-controller="BookLoan" asp-action="Index">Mina lån</a>
             <a asp-controller="Rooms" asp-action="MinaBokningar">Mina bokningar</a>
