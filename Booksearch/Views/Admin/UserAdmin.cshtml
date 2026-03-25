@@ -1,84 +1,156 @@
 ﻿@model Booksearch.ViewModels.UserAdmin
 
-<h2>User Management</h2>
+<h1 style="text-decoration: underline 2px solid var(--color-theme2); text-underline-offset: 5px;">Hantera användare</h1>
+<p>Lägg till, ta bort eller ändra <strong>användarkonton</strong>.<br/>Här kan du hantera alla användare på webbplatsen</p>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div style="padding:10px; border:1px solid #28a745; background:#d4edda; margin-bottom:16px; border-radius: 5px;">
+        <strong>Framgång:</strong> @TempData["SuccessMessage"]
+    </div>
 }
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div style="padding:10px; border:1px solid #cc0000; background:#ffe5e5; margin-bottom:16px; border-radius: 5px;">
+        <strong>Fel:</strong> @TempData["ErrorMessage"]
+    </div>
 }
 
 @if (!string.IsNullOrEmpty(Model.ApiError))
 {
-    <div class="alert alert-danger">@Model.ApiError</div>
+    <div style="padding:10px; border:1px solid #cc0000; background:#ffe5e5; margin-bottom:16px; border-radius: 5px;">
+        <strong>API-fel:</strong> @Model.ApiError
+    </div>
 }
 
 <div class="row">
     <!-- User List -->
     <div class="col-md-8">
-        <h3>Users</h3>
+        <h2 style="text-decoration: underline 2px solid var(--color-theme2); text-underline-offset: 3px;">Användare (@Model.Users.Count())</h2>
         
         @if (Model.Users.Any())
         {
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Password</th>
-                            <th>Actions</th>
+            <table style="border-collapse:collapse; width:100%; margin-bottom:24px;">
+                <thead>
+                    <tr>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">ID</th>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">Namn</th>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">E-post</th>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">Roll</th>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">Lösenord</th>
+                        <th style="text-align:left; border-bottom:2px solid var(--color-theme2); padding:12px 8px; font-weight: bold;">Åtgärder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:12px 8px; color: #666;">#@user.Id</td>
+                            <td style="padding:12px 8px; font-weight: 500;">@user.Name</td>
+                            <td style="padding:12px 8px; color: #666;">@user.Email</td>
+                            <td style="padding:12px 8px;">
+                                @if (user.IsAdmin)
+                                {
+                                    <span style="
+                                        background-color: var(--color-theme2);
+                                        color: black;
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        text-transform: uppercase;
+                                    ">Admin</span>
+                                }
+                                else
+                                {
+                                    <span style="
+                                        background-color: #e9ecef;
+                                        color: #495057;
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        text-transform: uppercase;
+                                    ">Användare</span>
+                                }
+                            </td>
+                            <td style="padding:12px 8px;">
+                                @if (string.IsNullOrEmpty(user.PasswordHash))
+                                {
+                                    <span style="
+                                        background-color: #f8d7da;
+                                        color: #721c24;
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                    ">Inget lösenord</span>
+                                }
+                                else
+                                {
+                                    <span style="
+                                        background-color: #d4edda;
+                                        color: #155724;
+                                        padding: 4px 12px;
+                                        border-radius: 15px;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                    ">Inställt</span>
+                                }
+                            </td>
+                            <td style="padding:12px 8px;">
+                                <a asp-action="EditUser" asp-route-id="@user.Id" 
+                                   style="
+                                    border: 2px solid var(--color-theme2);
+                                    padding: 4px 8px;
+                                    border-radius: 5px;
+                                    text-decoration: none;
+                                    margin-right: 5px;
+                                    font-size: 12px;
+                                   "
+                                   id="hoverEffekt">Ändra</a>
+
+                                <!-- Set Password Form -->
+                                <form asp-action="SetUserPassword" method="post" style="display: inline-block; margin-right: 5px;">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <input type="password" name="password" placeholder="Nytt lösenord" 
+                                           style="padding: 2px 4px; font-size: 11px; width: 80px; margin-right: 2px;" 
+                                           required minlength="6" />
+                                    <button type="submit" 
+                                            style="
+                                                border: 2px solid #ffc107;
+                                                background: #fff3cd;
+                                                padding: 2px 6px;
+                                                border-radius: 5px;
+                                                font-size: 11px;
+                                                cursor: pointer;
+                                            ">Sätt</button>
+                                </form>
+
+                                <!-- Delete Form -->
+                                <form asp-action="DeleteUser" method="post" style="display: inline-block;"
+                                      onsubmit="return confirm('Är du säker på att du vill ta bort användaren @user.Name?');">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" 
+                                            style="
+                                                border: 2px solid #dc3545;
+                                                background: #f8d7da;
+                                                padding: 4px 8px;
+                                                border-radius: 5px;
+                                                font-size: 12px;
+                                                cursor: pointer;
+                                            ">Ta bort</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.Users)
-                        {
-                            <tr>
-                                <td>@user.Id</td>
-                                <td>@user.Name</td>
-                                <td>@user.Email</td>
-                                <td>
-                                    @if (user.IsAdmin)
-                                    {
-                                        <span class="badge bg-warning">Admin</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">User</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (string.IsNullOrEmpty(user.PasswordHash))
-                                    {
-                                        <span class="badge bg-danger">No Password</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success">Set</span>
-                                    }
-                                </td>
-                                <td>
-                                    <a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Edit</a>
-                                    <button type="button" class="btn btn-sm btn-warning" 
-                                            onclick="showPasswordModal(@user.Id, '@user.Name')">Set Password</button>
-                                    <button type="button" class="btn btn-sm btn-danger" 
-                                            onclick="confirmDelete(@user.Id, '@user.Name')">Delete</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
-            <p>No users found.</p>
+            <p><i>Inga användare hittades.</i></p>
         }
     </div>
 
@@ -86,132 +158,102 @@
     <div class="col-md-4">
         @if (Model.IsEditing && Model.EditingUser != null)
         {
-            <h3>Edit User</h3>
-            <form asp-action="UpdateUser" method="post">
+            <h3 style="text-decoration: underline 2px solid var(--color-theme2); padding: 0; margin: 0; margin-top: 30px;">Ändra användare</h3>
+            <form asp-action="UpdateUser" method="post" style="margin-top: 20px;">
                 <input type="hidden" asp-for="EditingUser.Id" />
-            
-                <div class="mb-3">
-                    <label asp-for="EditingUser.Name" class="form-label">Name</label>
-                    <input asp-for="EditingUser.Name" class="form-control" required />
+        
+                <div style="margin-bottom: 16px;">
+                    <label asp-for="EditingUser.Name" style="display:block; font-weight: bold; margin-bottom: 5px;">Namn</label>
+                    <input asp-for="EditingUser.Name" style="width:100%; padding:8px; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box;" required />
                 </div>
-            
-                <div class="mb-3">
-                    <label asp-for="EditingUser.Email" class="form-label">Email</label>
-                    <input asp-for="EditingUser.Email" type="email" class="form-control" required />
+        
+                <div style="margin-bottom: 16px;">
+                    <label asp-for="EditingUser.Email" style="display:block; font-weight: bold; margin-bottom: 5px;">E-post</label>
+                    <input asp-for="EditingUser.Email" type="email" style="width:100%; padding:8px; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box;" required />
                 </div>
-            
-                <div class="mb-3 form-check">
-                    <input asp-for="EditingUser.IsAdmin" type="checkbox" class="form-check-input" />
-                    <label asp-for="EditingUser.IsAdmin" class="form-check-label">Is Admin</label>
+        
+                <div style="margin-bottom: 20px;">
+                    <input asp-for="EditingUser.IsAdmin" type="checkbox" style="margin-right: 8px;" />
+                    <label asp-for="EditingUser.IsAdmin" style="font-weight: bold;">Är Admin</label>
                 </div>
-            
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Update User</button>
-                    <a asp-action="UserAdmin" class="btn btn-secondary">Cancel</a>
+        
+                <div>
+                    <button type="submit" style="
+                        border: 2px solid var(--color-theme2);
+                        background: var(--color-theme2);
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        font-weight: bold;
+                        margin-right: 10px;
+                        cursor: pointer;
+                    ">Uppdatera användare</button>
+                    <a asp-action="UserAdmin" style="
+                        border: 2px solid #6c757d;
+                        padding: 8px 16px;
+                        border-radius: 5px;
+                        text-decoration: none;
+                        color: #6c757d;
+                        display: inline-block;
+                    ">Avbryt</a>
                 </div>
             </form>
         }
         else
         {
-            <h3>Create New User</h3>
-            <form asp-action="CreateUser" method="post">
-                <div class="mb-3">
-                    <label asp-for="Form.Name" class="form-label">Name</label>
-                    <input asp-for="Form.Name" class="form-control" required />
-                    <span asp-validation-for="Form.Name" class="text-danger"></span>
+            <h3 style="text-decoration: underline 2px solid var(--color-theme2); padding: 0; margin: 0; margin-top: 30px;">Skapa ny användare</h3>
+            <form asp-action="CreateUser" method="post" style="margin-top: 20px;">
+                <div style="margin-bottom: 16px;">
+                    <label asp-for="Form.Name" style="display:block; font-weight: bold; margin-bottom: 5px;">Namn</label>
+                    <input asp-for="Form.Name" style="width:100%; padding:8px; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box;" required />
+                    <span asp-validation-for="Form.Name" style="color: #dc3545; font-size: 12px;"></span>
                 </div>
-            
-                <div class="mb-3">
-                    <label asp-for="Form.Email" class="form-label">Email</label>
-                    <input asp-for="Form.Email" type="email" class="form-control" required />
-                    <span asp-validation-for="Form.Email" class="text-danger"></span>
+        
+                <div style="margin-bottom: 16px;">
+                    <label asp-for="Form.Email" style="display:block; font-weight: bold; margin-bottom: 5px;">E-post</label>
+                    <input asp-for="Form.Email" type="email" style="width:100%; padding:8px; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box;" required />
+                    <span asp-validation-for="Form.Email" style="color: #dc3545; font-size: 12px;"></span>
                 </div>
 
-                <!-- ✅ ADD PASSWORD FIELD -->
-                <div class="mb-3">
-                    <label asp-for="Form.Password" class="form-label">Password</label>
-                    <input asp-for="Form.Password" type="password" class="form-control" />
-                    <div class="form-text">Leave empty to create user without password (can be set later)</div>
+                <div style="margin-bottom: 16px;">
+                    <label asp-for="Form.Password" style="display:block; font-weight: bold; margin-bottom: 5px;">Lösenord</label>
+                    <input asp-for="Form.Password" type="password" style="width:100%; padding:8px; border: 2px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                        <i>Lämna tomt för att skapa användare utan lösenord (kan ställas in senare)</i>
+                    </div>
                 </div>
-            
-                <div class="mb-3 form-check">
-                    <input asp-for="Form.IsAdmin" type="checkbox" class="form-check-input" />
-                    <label asp-for="Form.IsAdmin" class="form-check-label">Is Admin</label>
+        
+                <div style="margin-bottom: 20px;">
+                    <input asp-for="Form.IsAdmin" type="checkbox" style="margin-right: 8px;" />
+                    <label asp-for="Form.IsAdmin" style="font-weight: bold;">Är Admin</label>
                 </div>
-            
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-success">Create User</button>
+        
+                <div>
+                    <button type="submit" style="
+                        border: 2px solid #28a745;
+                        background: #28a745;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    ">Skapa användare</button>
                 </div>
             </form>
         }
     </div>
 </div>
 
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--color-theme2);">
+    <a id="hoverEffekt" asp-action="Index" style="
+        border: 2px solid var(--color-theme2);
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+    ">Tillbaka till Dashboard</a>
 </div>
 
-<!-- Set Password Modal -->
-<div class="modal fade" id="passwordModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Set Password</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form asp-action="SetUserPassword" method="post">
-                <div class="modal-body">
-                    <p>Set password for user <strong id="passwordUserName"></strong>:</p>
-                    <input type="hidden" id="passwordUserId" name="userId" value="" />
-                    <div class="mb-3">
-                        <label class="form-label">New Password</label>
-                        <input type="password" name="password" class="form-control" required minlength="6" />
-                        <div class="form-text">Minimum 6 characters</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Set Password</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete user <strong id="userName"></strong>?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form asp-action="DeleteUser" method="post" style="display: inline;">
-                    <input type="hidden" id="deleteUserId" name="id" value="" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function confirmDelete(userId, userName) {
-    document.getElementById('deleteUserId').value = userId;
-    document.getElementById('userName').textContent = userName;
-    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    deleteModal.show();
+<style>
+#hoverEffekt:hover {
+    color: grey;
 }
-
-function showPasswordModal(userId, userName) {
-    document.getElementById('passwordUserId').value = userId;
-    document.getElementById('passwordUserName').textContent = userName;
-    var passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
-    passwordModal.show();
-}
-</script>
+</style>
