@@ -16,6 +16,20 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactAppPolicy", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "http://localhost:5174",
+                "http://localhost:5175"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();;
+    });
+});
 var app = builder.Build();
 
 // Apply pending migrations and seed database
@@ -38,6 +52,8 @@ var app = builder.Build();
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("ReactAppPolicy");
 
 // Add API Key middleware
 app.UseMiddleware<ApiKeyMiddleware>();
